@@ -31,7 +31,7 @@ export default function Editor() {
     setTimeline,
   } = usePanelStore();
 
-  const { activeProject, createNewProject, loadProject } = useProjectStore();
+  const { activeProject, loadProject } = useProjectStore();
 
   usePlaybackControls();
 
@@ -41,7 +41,7 @@ export default function Editor() {
         router.replace("/404");
       });
     }
-  }, [project_id, activeProject, createNewProject]);
+  }, [project_id, activeProject]);
 
   return (
     <EditorProvider>

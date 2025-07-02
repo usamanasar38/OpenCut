@@ -32,7 +32,7 @@ export default function ProjectsPage() {
   const router = useRouter();
 
   const handleCreateProject = async () => {
-    const projectId = await createNewProject("New Project");
+    const projectId = await createNewProject();
     router.push(`/editor/${projectId}`);
   };
 
