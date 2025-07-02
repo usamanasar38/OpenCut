@@ -1,20 +1,20 @@
 "use client";
 
 import { useEffect } from "react";
-import {
-  ResizablePanelGroup,
-  ResizablePanel,
-  ResizableHandle,
-} from "../../../components/ui/resizable";
-import { MediaPanel } from "../../../components/editor/media-panel";
-// import { PropertiesPanel } from "../../components/editor/properties-panel";
-import { Timeline } from "../../../components/editor/timeline";
-import { PreviewPanel } from "../../../components/editor/preview-panel";
 import { EditorHeader } from "@/components/editor-header";
-import { usePanelStore } from "@/stores/panel-store";
-import { useProjectStore } from "@/stores/project-store";
 import { EditorProvider } from "@/components/editor-provider";
 import { usePlaybackControls } from "@/hooks/use-playback-controls";
+import { usePanelStore } from "@/stores/panel-store";
+import { useProjectStore } from "@/stores/project-store";
+import { MediaPanel } from "../../../components/editor/media-panel";
+import { PreviewPanel } from "../../../components/editor/preview-panel";
+// import { PropertiesPanel } from "../../components/editor/properties-panel";
+import { Timeline } from "../../../components/editor/timeline";
+import {
+  ResizableHandle,
+  ResizablePanel,
+  ResizablePanelGroup,
+} from "../../../components/ui/resizable";
 
 export default function Editor() {
   const {
@@ -40,9 +40,9 @@ export default function Editor() {
 
   return (
     <EditorProvider>
-      <div className="h-screen w-screen flex flex-col bg-background overflow-hidden">
+      <div className="flex h-screen w-screen flex-col overflow-hidden bg-background">
         <EditorHeader />
-        <div className="flex-1 min-h-0 min-w-0">
+        <div className="min-h-0 min-w-0 flex-1">
           <ResizablePanelGroup direction="vertical" className="h-full w-full">
             <ResizablePanel
               defaultSize={mainContent}
@@ -74,7 +74,7 @@ export default function Editor() {
                   defaultSize={previewPanel}
                   minSize={30}
                   onResize={setPreviewPanel}
-                  className="min-w-0 min-h-0 flex-1"
+                  className="min-h-0 min-w-0 flex-1"
                 >
                   <PreviewPanel />
                 </ResizablePanel>

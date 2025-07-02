@@ -1,7 +1,7 @@
-import { Slider } from "../ui/slider";
-import { Label } from "../ui/label";
-import { Button } from "../ui/button";
 import { usePlaybackStore } from "@/stores/playback-store";
+import { Button } from "../ui/button";
+import { Label } from "../ui/label";
+import { Slider } from "../ui/slider";
 
 const SPEED_PRESETS = [
   { label: "0.5x", value: 0.5 },
@@ -15,7 +15,7 @@ export function SpeedControl() {
 
   return (
     <div className="space-y-4">
-      <h3 className="text-sm font-medium">Playback Speed</h3>
+      <h3 className="font-medium text-sm">Playback Speed</h3>
       <div className="space-y-4">
         <div className="flex gap-2">
           {SPEED_PRESETS.map((preset) => (
@@ -43,4 +43,4 @@ export function SpeedControl() {
       </div>
     </div>
   );
-} 
+}

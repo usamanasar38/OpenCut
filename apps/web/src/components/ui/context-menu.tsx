@@ -1,9 +1,9 @@
 "use client";
 
-import * as React from "react";
-import { ContextMenu as ContextMenuPrimitive } from "radix-ui";
-import { Check, ChevronRight, Circle } from "lucide-react";
 import { cva, type VariantProps } from "class-variance-authority";
+import { Check, ChevronRight, Circle } from "lucide-react";
+import { ContextMenu as ContextMenuPrimitive } from "radix-ui";
+import * as React from "react";
 
 import { cn } from "../../lib/utils";
 
@@ -24,14 +24,14 @@ const contextMenuItemVariants = cva(
   {
     variants: {
       variant: {
-        default: "focus:opacity-65 focus:text-accent-foreground",
+        default: "focus:text-accent-foreground focus:opacity-65",
         destructive: "text-destructive focus:text-destructive/80",
       },
     },
     defaultVariants: {
       variant: "default",
     },
-  }
+  },
 );
 
 const ContextMenuSubTrigger = React.forwardRef<
@@ -47,7 +47,7 @@ const ContextMenuSubTrigger = React.forwardRef<
       contextMenuItemVariants({ variant }),
       "data-[state=open]:bg-accent data-[state=open]:opacity-65",
       inset && "pl-8",
-      className
+      className,
     )}
     {...props}
   >
@@ -64,8 +64,8 @@ const ContextMenuSubContent = React.forwardRef<
   <ContextMenuPrimitive.SubContent
     ref={ref}
     className={cn(
-      "z-50 min-w-[8rem] overflow-hidden rounded-md border bg-popover p-1 text-popover-foreground shadow-lg data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
-      className
+      "data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 z-50 min-w-[8rem] overflow-hidden rounded-md border bg-popover p-1 text-popover-foreground shadow-lg data-[state=closed]:animate-out data-[state=open]:animate-in",
+      className,
     )}
     {...props}
   />
@@ -80,9 +80,9 @@ const ContextMenuContent = React.forwardRef<
     <ContextMenuPrimitive.Content
       ref={ref}
       className={cn(
-        "z-50 min-w-[8rem] overflow-hidden rounded-md border p-1 bg-popover text-popover-foreground shadow-md",
-        "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
-        className
+        "z-50 min-w-[8rem] overflow-hidden rounded-md border bg-popover p-1 text-popover-foreground shadow-md",
+        "data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 data-[state=closed]:animate-out data-[state=open]:animate-in",
+        className,
       )}
       {...props}
     />
@@ -102,7 +102,7 @@ const ContextMenuItem = React.forwardRef<
     className={cn(
       contextMenuItemVariants({ variant }),
       inset && "pl-8",
-      className
+      className,
     )}
     {...props}
   />
@@ -117,7 +117,7 @@ const ContextMenuCheckboxItem = React.forwardRef<
 >(({ className, children, checked, variant = "default", ...props }, ref) => (
   <ContextMenuPrimitive.CheckboxItem
     ref={ref}
-    className={cn(contextMenuItemVariants({ variant }), "pl-8 pr-2", className)}
+    className={cn(contextMenuItemVariants({ variant }), "pr-2 pl-8", className)}
     checked={checked}
     {...props}
   >
@@ -140,7 +140,7 @@ const ContextMenuRadioItem = React.forwardRef<
 >(({ className, children, variant = "default", ...props }, ref) => (
   <ContextMenuPrimitive.RadioItem
     ref={ref}
-    className={cn(contextMenuItemVariants({ variant }), "pl-8 pr-2", className)}
+    className={cn(contextMenuItemVariants({ variant }), "pr-2 pl-8", className)}
     {...props}
   >
     <span className="absolute left-2 flex h-3.5 w-3.5 items-center justify-center">
@@ -162,9 +162,9 @@ const ContextMenuLabel = React.forwardRef<
   <ContextMenuPrimitive.Label
     ref={ref}
     className={cn(
-      "px-2 py-1.5 text-sm font-semibold",
+      "px-2 py-1.5 font-semibold text-sm",
       inset && "pl-8",
-      className
+      className,
     )}
     {...props}
   />

@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect } from "react";
 import { Loader2 } from "lucide-react";
+import { useEffect } from "react";
 import { useEditorStore } from "@/stores/editor-store";
 
 interface EditorProviderProps {
@@ -18,10 +18,10 @@ export function EditorProvider({ children }: EditorProviderProps) {
   // Show loading screen while initializing
   if (isInitializing || !isPanelsReady) {
     return (
-      <div className="h-screen w-screen flex items-center justify-center bg-background">
+      <div className="flex h-screen w-screen items-center justify-center bg-background">
         <div className="flex flex-col items-center gap-4">
           <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
-          <p className="text-sm text-muted-foreground">Loading editor...</p>
+          <p className="text-muted-foreground text-sm">Loading editor...</p>
         </div>
       </div>
     );

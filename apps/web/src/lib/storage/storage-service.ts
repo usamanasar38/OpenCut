@@ -1,8 +1,8 @@
-import { TProject } from "@/types/project";
-import { MediaItem } from "@/stores/media-store";
+import type { MediaItem } from "@/stores/media-store";
+import type { TProject } from "@/types/project";
 import { IndexedDBAdapter } from "./indexeddb-adapter";
 import { OPFSAdapter } from "./opfs-adapter";
-import { MediaFileData, StorageConfig, SerializedProject } from "./types";
+import type { MediaFileData, SerializedProject, StorageConfig } from "./types";
 
 class StorageService {
   private projectsAdapter: IndexedDBAdapter<SerializedProject>;
@@ -20,13 +20,13 @@ class StorageService {
     this.projectsAdapter = new IndexedDBAdapter<SerializedProject>(
       this.config.projectsDb,
       "projects",
-      this.config.version
+      this.config.version,
     );
 
     this.mediaMetadataAdapter = new IndexedDBAdapter<MediaFileData>(
       this.config.mediaDb,
       "media-metadata",
-      this.config.version
+      this.config.version,
     );
 
     this.mediaFilesAdapter = new OPFSAdapter("media-files");
@@ -74,7 +74,7 @@ class StorageService {
 
     // Sort by last updated (most recent first)
     return projects.sort(
-      (a, b) => b.updatedAt.getTime() - a.updatedAt.getTime()
+      (a, b) => b.updatedAt.getTime() - a.updatedAt.getTime(),
     );
   }
 

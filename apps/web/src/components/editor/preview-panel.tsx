@@ -1,30 +1,31 @@
 "use client";
 
-import {
-  useTimelineStore,
-  type TimelineClip,
-  type TimelineTrack,
-} from "@/stores/timeline-store";
-import {
-  useMediaStore,
-  type MediaItem,
-  getMediaAspectRatio,
-} from "@/stores/media-store";
-import { usePlaybackStore } from "@/stores/playback-store";
-import { useEditorStore } from "@/stores/editor-store";
-import { VideoPlayer } from "@/components/ui/video-player";
+import { Pause, Play, Plus, Square, Volume2, VolumeX } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuTrigger,
   DropdownMenuSeparator,
+  DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Play, Pause, Volume2, VolumeX, Plus, Square } from "lucide-react";
-import { useState, useRef, useEffect } from "react";
-import { cn } from "@/lib/utils";
+import { VideoPlayer } from "@/components/ui/video-player";
 import { formatTimeCode } from "@/lib/time";
+import { cn } from "@/lib/utils";
+import { useEditorStore } from "@/stores/editor-store";
+import {
+  getMediaAspectRatio,
+  type MediaItem,
+  useMediaStore,
+} from "@/stores/media-store";
+import { usePlaybackStore } from "@/stores/playback-store";
+import {
+  type TimelineClip,
+  type TimelineTrack,
+  useTimelineStore,
+} from "@/stores/timeline-store";
+import Image from "next/image";
 
 interface ActiveClip {
   clip: TimelineClip;
@@ -35,8 +36,8 @@ interface ActiveClip {
 export function PreviewPanel() {
   const { tracks } = useTimelineStore();
   const { mediaItems } = useMediaStore();
-  const { currentTime, muted, toggleMute, volume } = usePlaybackStore();
-  const { canvasSize, canvasPresets, setCanvasSize } = useEditorStore();
+  const { currentTime } = usePlaybackStore();
+  const { canvasSize } = useEditorStore();
   const previewRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [previewDimensions, setPreviewDimensions] = useState({
@@ -79,12 +80,12 @@ export function PreviewPanel() {
       const targetRatio = canvasSize.width / canvasSize.height;
       const containerRatio = availableWidth / availableHeight;
 
-      let width, height;
+      let width: number, height: number;
 
       if (containerRatio > targetRatio) {
         // Container is wider - constrain by height
         height = availableHeight;
-        width = height * targetRatio;
+        width = height: number * targetRatio;
       } else {
         // Container is taller - constrain by width
         width = availableWidth;
@@ -134,7 +135,7 @@ export function PreviewPanel() {
   const hasAnyClips = tracks.some((track) => track.clips.length > 0);
 
   // Render a clip
-  const renderClip = (clipData: ActiveClip, index: number) => {
+  const renderClip = (clipData: ActiveClip, _index: number) => {
     const { clip, mediaItem } = clipData;
 
     // Test clips
@@ -142,11 +143,11 @@ export function PreviewPanel() {
       return (
         <div
           key={clip.id}
-          className="absolute inset-0 bg-gradient-to-br from-blue-500/20 to-purple-500/20 flex items-center justify-center"
+          className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-blue-500/20 to-purple-500/20"
         >
           <div className="text-center">
-            <div className="text-2xl mb-2">🎬</div>
-            <p className="text-xs text-white">{clip.name}</p>
+            <div className="mb-2 text-2xl">🎬</div>
+            <p className="text-white text-xs">{clip.name}</p>
           </div>
         </div>
       );
@@ -172,10 +173,10 @@ export function PreviewPanel() {
     if (mediaItem.type === "image") {
       return (
         <div key={clip.id} className="absolute inset-0">
-          <img
+          <Image
             src={mediaItem.url}
             alt={mediaItem.name}
-            className="w-full h-full object-cover"
+            className="h-full w-full object-cover"
             draggable={false}
           />
         </div>
@@ -187,11 +188,11 @@ export function PreviewPanel() {
       return (
         <div
           key={clip.id}
-          className="absolute inset-0 bg-gradient-to-br from-green-500/20 to-emerald-500/20 flex items-center justify-center"
+          className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-green-500/20 to-emerald-500/20"
         >
           <div className="text-center">
-            <div className="text-2xl mb-2">🎵</div>
-            <p className="text-xs text-white">{mediaItem.name}</p>
+            <div className="mb-2 text-2xl">🎵</div>
+            <p className="text-white text-xs">{mediaItem.name}</p>
           </div>
         </div>
       );
@@ -201,15 +202,15 @@ export function PreviewPanel() {
   };
 
   return (
-    <div className="h-full w-full flex flex-col min-h-0 min-w-0">
+    <div className="flex h-full min-h-0 w-full min-w-0 flex-col">
       <div
         ref={containerRef}
-        className="flex-1 flex flex-col items-center justify-center p-3 min-h-0 min-w-0 gap-4"
+        className="flex min-h-0 min-w-0 flex-1 flex-col items-center justify-center gap-4 p-3"
       >
         {hasAnyClips ? (
           <div
             ref={previewRef}
-            className="relative overflow-hidden rounded-sm bg-black border"
+            className="relative overflow-hidden rounded-sm border bg-black"
             style={{
               width: previewDimensions.width,
               height: previewDimensions.height,
@@ -226,7 +227,7 @@ export function PreviewPanel() {
         ) : (
           <>
             {/* Empty div so toolbar stays at the bottom */}
-            <div className="w-full h-full"></div>
+            <div className="h-full w-full"></div>
           </>
         )}
 
@@ -250,7 +251,7 @@ function PreviewToolbar({ hasAnyClips }: { hasAnyClips: boolean }) {
   // Find the current preset based on canvas size
   const currentPreset = canvasPresets.find(
     (preset) =>
-      preset.width === canvasSize.width && preset.height === canvasSize.height
+      preset.width === canvasSize.width && preset.height === canvasSize.height,
   );
 
   const handlePresetSelect = (preset: { width: number; height: number }) => {
@@ -285,13 +286,13 @@ function PreviewToolbar({ hasAnyClips }: { hasAnyClips: boolean }) {
   return (
     <div
       data-toolbar
-      className="flex items-end justify-between gap-2 p-1 pt-2 bg-background-500 w-full"
+      className="flex w-full items-end justify-between gap-2 bg-background-500 p-1 pt-2"
     >
       <div>
         <p
           className={cn(
-            "text-xs text-muted-foreground tabular-nums",
-            !hasAnyClips && "opacity-50"
+            "text-muted-foreground text-xs tabular-nums",
+            !hasAnyClips && "opacity-50",
           )}
         >
           {formatTimeCode(currentTime, "HH:MM:SS:CS")}/
@@ -315,7 +316,7 @@ function PreviewToolbar({ hasAnyClips }: { hasAnyClips: boolean }) {
           <DropdownMenuTrigger asChild>
             <Button
               size="sm"
-              className="!bg-background text-foreground text-xs h-auto rounded-none border border-foreground px-0.5 py-0 font-light"
+              className="!bg-background h-auto rounded-none border border-foreground px-0.5 py-0 font-light text-foreground text-xs"
               disabled={!hasAnyClips}
             >
               {currentPreset?.name || "Ratio"}
@@ -335,7 +336,7 @@ function PreviewToolbar({ hasAnyClips }: { hasAnyClips: boolean }) {
                 onClick={() => handlePresetSelect(preset)}
                 className={cn(
                   "text-xs",
-                  currentPreset?.name === preset.name && "font-semibold"
+                  currentPreset?.name === preset.name && "font-semibold",
                 )}
               >
                 {preset.name}

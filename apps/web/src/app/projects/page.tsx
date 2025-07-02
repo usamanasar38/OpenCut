@@ -1,30 +1,30 @@
 "use client";
 
+import {
+  Calendar,
+  ChevronLeft,
+  Loader2,
+  MoreHorizontal,
+  Plus,
+  Video,
+} from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { DeleteProjectDialog } from "@/components/delete-project-dialog";
+import { RenameProjectDialog } from "@/components/rename-project-dialog";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import {
-  ChevronLeft,
-  Plus,
-  Calendar,
-  MoreHorizontal,
-  Video,
-  Loader2,
-} from "lucide-react";
-import { TProject } from "@/types/project";
-import Image from "next/image";
-import {
   DropdownMenu,
-  DropdownMenuItem,
   DropdownMenuContent,
-  DropdownMenuTrigger,
+  DropdownMenuItem,
   DropdownMenuSeparator,
+  DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useProjectStore } from "@/stores/project-store";
-import { useRouter } from "next/navigation";
-import { DeleteProjectDialog } from "@/components/delete-project-dialog";
-import { RenameProjectDialog } from "@/components/rename-project-dialog";
+import type { TProject } from "@/types/project";
 
 export default function ProjectsPage() {
   const { createNewProject, savedProjects, isLoading, isInitialized } =
@@ -39,22 +39,22 @@ export default function ProjectsPage() {
 
   return (
     <div className="min-h-screen bg-background">
-      <div className="pt-6 px-6 flex items-center justify-between w-full h-16">
+      <div className="flex h-16 w-full items-center justify-between px-6 pt-6">
         <Link
           href="/"
-          className="flex items-center gap-1 hover:text-muted-foreground transition-colors"
+          className="flex items-center gap-1 transition-colors hover:text-muted-foreground"
         >
           <ChevronLeft className="!size-5 shrink-0" />
-          <span className="text-sm font-medium">Back</span>
+          <span className="font-medium text-sm">Back</span>
         </Link>
         <div className="block md:hidden">
           <CreateButton onClick={handleCreateProject} />
         </div>
       </div>
-      <main className="max-w-6xl mx-auto px-6 pt-6 pb-6">
+      <main className="mx-auto max-w-6xl px-6 pt-6 pb-6">
         <div className="mb-8 flex items-center justify-between">
           <div className="flex flex-col gap-3">
-            <h1 className="text-2xl md:text-3xl font-bold tracking-tight">
+            <h1 className="font-bold text-2xl tracking-tight md:text-3xl">
               Your Projects
             </h1>
             <p className="text-muted-foreground">
@@ -69,12 +69,12 @@ export default function ProjectsPage() {
 
         {isLoading || !isInitialized ? (
           <div className="flex items-center justify-center py-16">
-            <Loader2 className="h-8 w-8 text-muted-foreground animate-spin" />
+            <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
           </div>
         ) : savedProjects.length === 0 ? (
           <NoProjects onCreateProject={handleCreateProject} />
         ) : (
-          <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 xs:grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-4">
             {savedProjects.map((project) => (
               <ProjectCard key={project.id} project={project} />
             ))}
@@ -116,8 +116,8 @@ function ProjectCard({ project }: { project: TProject }) {
 
   return (
     <>
-      <Link href={`/editor/${project.id}`} className="block group">
-        <Card className="overflow-hidden bg-background border-none p-0">
+      <Link href={`/editor/${project.id}`} className="group block">
+        <Card className="overflow-hidden border-none bg-background p-0">
           <div
             className={`relative aspect-square bg-muted transition-opacity ${
               isDropdownOpen
@@ -135,16 +135,16 @@ function ProjectCard({ project }: { project: TProject }) {
                   className="object-cover"
                 />
               ) : (
-                <div className="w-full h-full bg-muted/50 flex items-center justify-center">
+                <div className="flex h-full w-full items-center justify-center bg-muted/50">
                   <Video className="h-12 w-12 flex-shrink-0 text-muted-foreground" />
                 </div>
               )}
             </div>
           </div>
 
-          <CardContent className="px-0 pt-5 flex flex-col gap-1">
+          <CardContent className="flex flex-col gap-1 px-0 pt-5">
             <div className="flex items-start justify-between">
-              <h3 className="font-medium text-sm leading-snug group-hover:text-foreground/90 transition-colors line-clamp-2">
+              <h3 className="line-clamp-2 font-medium text-sm leading-snug transition-colors group-hover:text-foreground/90">
                 {project.name}
               </h3>
               <DropdownMenu
@@ -155,7 +155,7 @@ function ProjectCard({ project }: { project: TProject }) {
                   <Button
                     variant="text"
                     size="sm"
-                    className={`size-6 p-0 transition-all shrink-0 ml-2 ${
+                    className={`ml-2 size-6 shrink-0 p-0 transition-all ${
                       isDropdownOpen
                         ? "opacity-100"
                         : "opacity-0 group-hover:opacity-100"
@@ -208,7 +208,7 @@ function ProjectCard({ project }: { project: TProject }) {
             </div>
 
             <div className="space-y-1">
-              <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
+              <div className="flex items-center gap-1.5 text-muted-foreground text-sm">
                 <Calendar className="!size-4" />
                 <span>Created {formatDate(project.createdAt)}</span>
               </div>
@@ -235,7 +235,7 @@ function CreateButton({ onClick }: { onClick?: () => void }) {
   return (
     <Button className="flex" onClick={onClick}>
       <Plus className="!size-4" />
-      <span className="text-sm font-medium">New project</span>
+      <span className="font-medium text-sm">New project</span>
     </Button>
   );
 }
@@ -243,11 +243,11 @@ function CreateButton({ onClick }: { onClick?: () => void }) {
 function NoProjects({ onCreateProject }: { onCreateProject: () => void }) {
   return (
     <div className="flex flex-col items-center justify-center py-16 text-center">
-      <div className="w-16 h-16 rounded-full bg-muted/30 flex items-center justify-center mb-4">
+      <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-muted/30">
         <Video className="h-8 w-8 text-muted-foreground" />
       </div>
-      <h3 className="text-lg font-medium mb-2">No projects yet</h3>
-      <p className="text-muted-foreground mb-6 max-w-md">
+      <h3 className="mb-2 font-medium text-lg">No projects yet</h3>
+      <p className="mb-6 max-w-md text-muted-foreground">
         Start creating your first video project. Import media, edit, and export
         professional videos.
       </p>

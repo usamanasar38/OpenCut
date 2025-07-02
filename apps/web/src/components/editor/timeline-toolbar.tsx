@@ -1,6 +1,5 @@
 "use client";
 
-import type { TrackType } from "@/types/timeline";
 import {
   ArrowLeftToLine,
   ArrowRightToLine,
@@ -12,6 +11,7 @@ import {
   SplitSquareHorizontal,
   Trash2,
 } from "lucide-react";
+import type { TrackType } from "@/types/timeline";
 import { Button } from "../ui/button";
 import {
   Select,
@@ -59,7 +59,7 @@ export function TimelineToolbar({
   handleDeleteSelected,
 }: TimelineToolbarProps) {
   return (
-    <div className="border-b flex items-center px-2 py-1 gap-1">
+    <div className="flex items-center gap-1 border-b px-2 py-1">
       <TooltipProvider delayDuration={500}>
         {/* Play/Pause Button */}
         <Tooltip>
@@ -82,11 +82,11 @@ export function TimelineToolbar({
           </TooltipContent>
         </Tooltip>
 
-        <div className="w-px h-6 bg-border mx-1" />
+        <div className="mx-1 h-6 w-px bg-border" />
 
         {/* Time Display */}
         <div
-          className="text-xs text-muted-foreground font-mono px-2"
+          className="px-2 font-mono text-muted-foreground text-xs"
           style={{ minWidth: "18ch", textAlign: "center" }}
         >
           {currentTime.toFixed(1)}s / {duration.toFixed(1)}s
@@ -95,7 +95,7 @@ export function TimelineToolbar({
         {/* Test Clip Button - for debugging */}
         {tracks.length === 0 && (
           <>
-            <div className="w-px h-6 bg-border mx-1" />
+            <div className="mx-1 h-6 w-px bg-border" />
             <Tooltip>
               <TooltipTrigger asChild>
                 <Button
@@ -122,7 +122,7 @@ export function TimelineToolbar({
           </>
         )}
 
-        <div className="w-px h-6 bg-border mx-1" />
+        <div className="mx-1 h-6 w-px bg-border" />
 
         <Tooltip>
           <TooltipTrigger asChild>
@@ -191,7 +191,7 @@ export function TimelineToolbar({
           <TooltipContent>Delete clip (Delete)</TooltipContent>
         </Tooltip>
 
-        <div className="w-px h-6 bg-border mx-1" />
+        <div className="mx-1 h-6 w-px bg-border" />
 
         {/* Speed Control */}
         <Tooltip>
@@ -200,7 +200,7 @@ export function TimelineToolbar({
               value={speed.toFixed(1)}
               onValueChange={(value) => setSpeed(parseFloat(value))}
             >
-              <SelectTrigger className="w-[90px] h-8">
+              <SelectTrigger className="h-8 w-[90px]">
                 <SelectValue placeholder="1.0x" />
               </SelectTrigger>
               <SelectContent>

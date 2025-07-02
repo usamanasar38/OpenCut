@@ -1,5 +1,6 @@
-import React, { useEffect, useRef, useState } from 'react';
-import WaveSurfer from 'wavesurfer.js';
+import type React from "react";
+import { useEffect, useRef, useState } from "react";
+import WaveSurfer from "wavesurfer.js";
 
 interface AudioWaveformProps {
   audioUrl: string;
@@ -7,10 +8,10 @@ interface AudioWaveformProps {
   className?: string;
 }
 
-const AudioWaveform: React.FC<AudioWaveformProps> = ({ 
-  audioUrl, 
-  height = 32, 
-  className = '' 
+const AudioWaveform: React.FC<AudioWaveformProps> = ({
+  audioUrl,
+  height = 32,
+  className = "",
 }) => {
   const waveformRef = useRef<HTMLDivElement>(null);
   const wavesurfer = useRef<WaveSurfer | null>(null);
@@ -28,7 +29,7 @@ const AudioWaveform: React.FC<AudioWaveformProps> = ({
         if (wavesurfer.current) {
           try {
             wavesurfer.current.destroy();
-          } catch (e) {
+          } catch (_e) {
             // Silently ignore destroy errors
           }
           wavesurfer.current = null;
@@ -36,9 +37,9 @@ const AudioWaveform: React.FC<AudioWaveformProps> = ({
 
         wavesurfer.current = WaveSurfer.create({
           container: waveformRef.current,
-          waveColor: 'rgba(255, 255, 255, 0.6)',
-          progressColor: 'rgba(255, 255, 255, 0.9)',
-          cursorColor: 'transparent',
+          waveColor: "rgba(255, 255, 255, 0.6)",
+          progressColor: "rgba(255, 255, 255, 0.9)",
+          cursorColor: "transparent",
           barWidth: 2,
           barGap: 1,
           height: height,
@@ -47,15 +48,15 @@ const AudioWaveform: React.FC<AudioWaveformProps> = ({
         });
 
         // Event listeners
-        wavesurfer.current.on('ready', () => {
+        wavesurfer.current.on("ready", () => {
           if (mounted) {
             setIsLoading(false);
             setError(false);
           }
         });
 
-        wavesurfer.current.on('error', (err) => {
-          console.error('WaveSurfer error:', err);
+        wavesurfer.current.on("error", (err) => {
+          console.error("WaveSurfer error:", err);
           if (mounted) {
             setError(true);
             setIsLoading(false);
@@ -63,9 +64,8 @@ const AudioWaveform: React.FC<AudioWaveformProps> = ({
         });
 
         await wavesurfer.current.load(audioUrl);
-
       } catch (err) {
-        console.error('Failed to initialize WaveSurfer:', err);
+        console.error("Failed to initialize WaveSurfer:", err);
         if (mounted) {
           setError(true);
           setIsLoading(false);
@@ -90,8 +90,11 @@ const AudioWaveform: React.FC<AudioWaveformProps> = ({
 
   if (error) {
     return (
-      <div className={`flex items-center justify-center ${className}`} style={{ height }}>
-        <span className="text-xs text-foreground/60">Audio unavailable</span>
+      <div
+        className={`flex items-center justify-center ${className}`}
+        style={{ height }}
+      >
+        <span className="text-foreground/60 text-xs">Audio unavailable</span>
       </div>
     );
   }
@@ -100,12 +103,12 @@ const AudioWaveform: React.FC<AudioWaveformProps> = ({
     <div className={`relative ${className}`}>
       {isLoading && (
         <div className="absolute inset-0 flex items-center justify-center">
-          <span className="text-xs text-foreground/60">Loading...</span>
+          <span className="text-foreground/60 text-xs">Loading...</span>
         </div>
       )}
-      <div 
-        ref={waveformRef} 
-        className={`w-full transition-opacity duration-200 ${isLoading ? 'opacity-0' : 'opacity-100'}`}
+      <div
+        ref={waveformRef}
+        className={`w-full transition-opacity duration-200 ${isLoading ? "opacity-0" : "opacity-100"}`}
         style={{ height }}
       />
     </div>

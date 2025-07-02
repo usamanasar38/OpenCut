@@ -1,14 +1,14 @@
 "use client";
 
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { type MediaItem, useMediaStore } from "@/stores/media-store";
+import { usePlaybackStore } from "@/stores/playback-store";
 import {
-  useTimelineStore,
   type TimelineClip,
   type TimelineTrack,
+  useTimelineStore,
 } from "@/stores/timeline-store";
-import { useMediaStore, type MediaItem } from "@/stores/media-store";
-import { usePlaybackStore } from "@/stores/playback-store";
-import { Button } from "@/components/ui/button";
-import { useState } from "react";
 
 // Only show in development
 const SHOW_DEBUG_INFO = process.env.NODE_ENV === "development";
@@ -55,48 +55,48 @@ export function DevelopmentDebug() {
   const activeClips = getActiveClips();
 
   return (
-    <div className="fixed bottom-4 right-4 z-50">
+    <div className="fixed right-4 bottom-4 z-50">
       <div className="flex flex-col items-end gap-2">
         {/* Toggle Button */}
         <Button
           variant="outline"
           size="sm"
           onClick={() => setShowDebug(!showDebug)}
-          className="text-xs backdrop-blur-md bg-background/80 border-border/50"
+          className="border-border/50 bg-background/80 text-xs backdrop-blur-md"
         >
           Debug {showDebug ? "ON" : "OFF"}
         </Button>
 
         {/* Debug Info Panel */}
         {showDebug && (
-          <div className="backdrop-blur-md bg-background/90 border border-border/50 rounded-lg p-3 max-w-sm">
-            <div className="text-xs font-medium mb-2 text-foreground">
+          <div className="max-w-sm rounded-lg border border-border/50 bg-background/90 p-3 backdrop-blur-md">
+            <div className="mb-2 font-medium text-foreground text-xs">
               Active Clips ({activeClips.length})
             </div>
-            <div className="space-y-1 max-h-40 overflow-y-auto">
+            <div className="max-h-40 space-y-1 overflow-y-auto">
               {activeClips.map((clipData, index) => (
                 <div
                   key={clipData.clip.id}
-                  className="flex items-center gap-2 px-2 py-1 bg-muted/60 rounded text-xs"
+                  className="flex items-center gap-2 rounded bg-muted/60 px-2 py-1 text-xs"
                 >
-                  <span className="w-4 h-4 bg-primary/20 rounded text-center text-xs leading-4 flex-shrink-0">
+                  <span className="h-4 w-4 flex-shrink-0 rounded bg-primary/20 text-center text-xs leading-4">
                     {index + 1}
                   </span>
                   <div className="min-w-0 flex-1">
                     <div className="truncate">{clipData.clip.name}</div>
-                    <div className="text-muted-foreground text-[10px]">
+                    <div className="text-[10px] text-muted-foreground">
                       {clipData.mediaItem?.type || "test"}
                     </div>
                   </div>
                 </div>
               ))}
               {activeClips.length === 0 && (
-                <div className="text-muted-foreground text-xs py-2 text-center">
+                <div className="py-2 text-center text-muted-foreground text-xs">
                   No active clips
                 </div>
               )}
             </div>
-            <div className="mt-2 pt-2 border-t border-border/30 text-[10px] text-muted-foreground">
+            <div className="mt-2 border-border/30 border-t pt-2 text-[10px] text-muted-foreground">
               Time: {currentTime.toFixed(2)}s
             </div>
           </div>

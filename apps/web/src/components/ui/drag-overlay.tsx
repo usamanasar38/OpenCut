@@ -14,11 +14,11 @@ export function DragOverlay({
   if (!isVisible) return null;
 
   return (
-    <div className="absolute inset-0 bg-accent/20 backdrop-blur-lg border-2 border-dashed border-accent flex items-center justify-center z-10 pointer-events-none">
+    <div className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center border-2 border-accent border-dashed bg-accent/20 backdrop-blur-lg">
       <div className="text-center">
-        <Upload className="h-8 w-8 text-accent mx-auto mb-2" />
-        <p className="text-sm font-medium text-accent">{title}</p>
-        <p className="text-xs text-muted-foreground">{description}</p>
+        <Upload className="mx-auto mb-2 h-8 w-8 text-accent" />
+        <p className="font-medium text-accent text-sm">{title}</p>
+        <p className="text-muted-foreground text-xs">{description}</p>
       </div>
     </div>
   );

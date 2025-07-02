@@ -1,10 +1,10 @@
 "use client";
 
 import { createContext, useContext, useEffect, useState } from "react";
-import { useProjectStore } from "@/stores/project-store";
-import { useMediaStore } from "@/stores/media-store";
-import { storageService } from "@/lib/storage/storage-service";
 import { toast } from "sonner";
+import { storageService } from "@/lib/storage/storage-service";
+import { useMediaStore } from "@/stores/media-store";
+import { useProjectStore } from "@/stores/project-store";
 
 interface StorageContextType {
   isInitialized: boolean;
@@ -48,7 +48,7 @@ export function StorageProvider({ children }: StorageProviderProps) {
 
         if (!hasSupport) {
           toast.warning(
-            "Storage not fully supported. Some features may not work."
+            "Storage not fully supported. Some features may not work.",
           );
         }
 

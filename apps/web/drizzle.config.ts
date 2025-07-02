@@ -1,5 +1,5 @@
-import type { Config } from "drizzle-kit";
 import * as dotenv from "dotenv";
+import type { Config } from "drizzle-kit";
 
 // Load the right env file based on environment
 if (process.env.NODE_ENV === "production") {

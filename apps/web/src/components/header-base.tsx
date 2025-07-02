@@ -1,7 +1,7 @@
 "use client";
 
+import type { ReactNode } from "react";
 import { cn } from "@/lib/utils";
-import { ReactNode } from "react";
 
 interface HeaderBaseProps {
   leftContent?: ReactNode;
@@ -21,7 +21,7 @@ export function HeaderBase({
   // If children is provided, render it directly without the grid layout
   if (children) {
     return (
-      <header className={cn("px-6 h-16 flex items-center", className)}>
+      <header className={cn("flex h-16 items-center px-6", className)}>
         {children}
       </header>
     );
@@ -29,7 +29,7 @@ export function HeaderBase({
 
   return (
     <header
-      className={cn("px-6 h-14 flex justify-between items-center", className)}
+      className={cn("flex h-14 items-center justify-between px-6", className)}
     >
       {leftContent && <div className="flex items-center">{leftContent}</div>}
       {centerContent && (

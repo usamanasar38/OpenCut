@@ -43,7 +43,7 @@ export const getFileType = (file: File): "image" | "video" | "audio" | null => {
 
 // Helper function to get image dimensions
 export const getImageDimensions = (
-  file: File
+  file: File,
 ): Promise<{ width: number; height: number }> => {
   return new Promise((resolve, reject) => {
     const img = new Image();
@@ -66,7 +66,7 @@ export const getImageDimensions = (
 
 // Helper function to generate video thumbnail and get dimensions
 export const generateVideoThumbnail = (
-  file: File
+  file: File,
 ): Promise<{ thumbnailUrl: string; width: number; height: number }> => {
   return new Promise((resolve, reject) => {
     const video = document.createElement("video");
@@ -114,7 +114,7 @@ export const generateVideoThumbnail = (
 export const getMediaDuration = (file: File): Promise<number> => {
   return new Promise((resolve, reject) => {
     const element = document.createElement(
-      file.type.startsWith("video/") ? "video" : "audio"
+      file.type.startsWith("video/") ? "video" : "audio",
     ) as HTMLVideoElement | HTMLAudioElement;
 
     element.addEventListener("loadedmetadata", () => {
@@ -224,7 +224,7 @@ export const useMediaStore = create<MediaStore>((set, get) => ({
     try {
       const mediaIds = state.mediaItems.map((item) => item.id);
       await Promise.all(
-        mediaIds.map((id) => storageService.deleteMediaItem(id))
+        mediaIds.map((id) => storageService.deleteMediaItem(id)),
       );
     } catch (error) {
       console.error("Failed to clear media items from storage:", error);

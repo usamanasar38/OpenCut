@@ -1,10 +1,10 @@
-import { useEffect, useCallback } from "react";
+import { useCallback, useEffect } from "react";
+import { toast } from "sonner";
 import { usePlaybackStore } from "@/stores/playback-store";
 import { useTimelineStore } from "@/stores/timeline-store";
-import { toast } from "sonner";
 
 export const usePlaybackControls = () => {
-  const { isPlaying, currentTime, play, pause, seek } = usePlaybackStore();
+  const { isPlaying, currentTime, play, pause } = usePlaybackStore();
 
   const {
     selectedClips,
@@ -164,7 +164,7 @@ export const usePlaybackControls = () => {
       handleSplitAndKeepLeftCallback,
       handleSplitAndKeepRightCallback,
       handleSeparateAudioCallback,
-    ]
+    ],
   );
 
   useEffect(() => {

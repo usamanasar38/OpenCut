@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { usePlaybackStore } from "@/stores/playback-store";
 
 interface VideoPlayerProps {
@@ -42,8 +42,8 @@ export function VideoPlayer({
         trimStart,
         Math.min(
           clipDuration - trimEnd,
-          timelineTime - clipStartTime + trimStart
-        )
+          timelineTime - clipStartTime + trimStart,
+        ),
       );
       video.currentTime = videoTime;
     };
@@ -55,8 +55,8 @@ export function VideoPlayer({
         trimStart,
         Math.min(
           clipDuration - trimEnd,
-          timelineTime - clipStartTime + trimStart
-        )
+          timelineTime - clipStartTime + trimStart,
+        ),
       );
 
       if (Math.abs(video.currentTime - targetTime) > 0.5) {
@@ -71,22 +71,22 @@ export function VideoPlayer({
     window.addEventListener("playback-seek", handleSeekEvent as EventListener);
     window.addEventListener(
       "playback-update",
-      handleUpdateEvent as EventListener
+      handleUpdateEvent as EventListener,
     );
     window.addEventListener("playback-speed", handleSpeed as EventListener);
 
     return () => {
       window.removeEventListener(
         "playback-seek",
-        handleSeekEvent as EventListener
+        handleSeekEvent as EventListener,
       );
       window.removeEventListener(
         "playback-update",
-        handleUpdateEvent as EventListener
+        handleUpdateEvent as EventListener,
       );
       window.removeEventListener(
         "playback-speed",
-        handleSpeed as EventListener
+        handleSpeed as EventListener,
       );
     };
   }, [clipStartTime, trimStart, trimEnd, clipDuration, isInClipRange]);
@@ -118,7 +118,7 @@ export function VideoPlayer({
       ref={videoRef}
       src={src}
       poster={poster}
-      className={`w-full h-full object-cover ${className}`}
+      className={`h-full w-full object-cover ${className}`}
       playsInline
       preload="auto"
       controls={false}

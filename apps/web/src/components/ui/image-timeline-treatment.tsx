@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 import type { BackgroundType } from "@/types/editor";
+import Image from "next/image";
 
 interface ImageTimelineTreatmentProps {
   src: string;
@@ -52,10 +53,10 @@ export function ImageTimelineTreatment({
         <>
           {backgroundType === "blur" && (
             <div className="absolute inset-0">
-              <img
+              <Image
                 src={src}
                 alt=""
-                className="w-full h-full object-cover filter blur-xl scale-110 opacity-60"
+                className="h-full w-full scale-110 object-cover opacity-60 blur-xl filter"
                 aria-hidden="true"
               />
               <div className="absolute inset-0 bg-black/20" />
@@ -64,10 +65,10 @@ export function ImageTimelineTreatment({
 
           {backgroundType === "mirror" && (
             <div className="absolute inset-0">
-              <img
+              <Image
                 src={src}
                 alt=""
-                className="w-full h-full object-cover opacity-30"
+                className="h-full w-full object-cover opacity-30"
                 aria-hidden="true"
               />
             </div>
@@ -84,7 +85,7 @@ export function ImageTimelineTreatment({
         <img
           src={src}
           alt={alt}
-          className="w-full h-full object-cover"
+          className="h-full w-full object-cover"
           onLoad={handleImageLoad}
         />
       </div>
@@ -92,7 +93,7 @@ export function ImageTimelineTreatment({
       {/* Loading state */}
       {!imageLoaded && (
         <div className="absolute inset-0 flex items-center justify-center bg-muted/30">
-          <div className="animate-pulse text-xs text-muted-foreground">
+          <div className="animate-pulse text-muted-foreground text-xs">
             Loading...
           </div>
         </div>

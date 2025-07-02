@@ -1,4 +1,4 @@
-import { TimelineTrack, TimelineClip } from "@/stores/timeline-store";
+import type { TimelineClip, TimelineTrack } from "@/stores/timeline-store";
 
 export type TrackType = "video" | "audio" | "effects";
 

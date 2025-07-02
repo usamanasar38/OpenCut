@@ -1,10 +1,13 @@
 "use client";
 
+import { useState } from "react";
+import { ImageTimelineTreatment } from "@/components/ui/image-timeline-treatment";
+import { useMediaStore } from "@/stores/media-store";
+import { useTimelineStore } from "@/stores/timeline-store";
+import type { BackgroundType } from "@/types/editor";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
-import { Slider } from "../ui/slider";
 import { ScrollArea } from "../ui/scroll-area";
-import { Separator } from "../ui/separator";
 import {
   Select,
   SelectContent,
@@ -12,12 +15,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
-import { useTimelineStore } from "@/stores/timeline-store";
-import { useMediaStore } from "@/stores/media-store";
-import { ImageTimelineTreatment } from "@/components/ui/image-timeline-treatment";
-import { useState } from "react";
+import { Separator } from "../ui/separator";
+import { Slider } from "../ui/slider";
 import { SpeedControl } from "./speed-control";
-import type { BackgroundType } from "@/types/editor";
 
 export function PropertiesPanel() {
   const { tracks } = useTimelineStore();
@@ -55,12 +55,12 @@ export function PropertiesPanel() {
         {firstImageItem && (
           <>
             <div className="space-y-4">
-              <h3 className="text-sm font-medium">Image Treatment</h3>
+              <h3 className="font-medium text-sm">Image Treatment</h3>
               <div className="space-y-4">
                 {/* Preview */}
                 <div className="space-y-2">
                   <Label>Preview</Label>
-                  <div className="w-full aspect-video max-w-48">
+                  <div className="aspect-video w-full max-w-48">
                     <ImageTimelineTreatment
                       src={firstImageItem.url}
                       alt={firstImageItem.name}
@@ -102,7 +102,7 @@ export function PropertiesPanel() {
                         type="color"
                         value={backgroundColor}
                         onChange={(e) => setBackgroundColor(e.target.value)}
-                        className="w-16 h-10 p-1"
+                        className="h-10 w-16 p-1"
                       />
                       <Input
                         value={backgroundColor}
@@ -130,7 +130,7 @@ export function PropertiesPanel() {
 
         {/* Transform */}
         <div className="space-y-4">
-          <h3 className="text-sm font-medium">Transform</h3>
+          <h3 className="font-medium text-sm">Transform</h3>
           <div className="space-y-2">
             <div className="grid grid-cols-2 gap-2">
               <div className="space-y-1">
@@ -159,7 +159,7 @@ export function PropertiesPanel() {
 
         {/* Effects */}
         <div className="space-y-4">
-          <h3 className="text-sm font-medium">Effects</h3>
+          <h3 className="font-medium text-sm">Effects</h3>
           <div className="space-y-4">
             <div className="space-y-1">
               <Label htmlFor="opacity">Opacity</Label>
@@ -188,7 +188,7 @@ export function PropertiesPanel() {
 
         {/* Timing */}
         <div className="space-y-4">
-          <h3 className="text-sm font-medium">Timing</h3>
+          <h3 className="font-medium text-sm">Timing</h3>
           <div className="space-y-2">
             <div className="space-y-1">
               <Label htmlFor="duration">Duration (seconds)</Label>

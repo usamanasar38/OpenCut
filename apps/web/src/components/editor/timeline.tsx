@@ -1,26 +1,25 @@
 "use client";
 
-import { ScrollArea } from "../ui/scroll-area";
-import { Button } from "../ui/button";
 import {
-  Scissors,
   ArrowLeftToLine,
   ArrowRightToLine,
-  Trash2,
-  Snowflake,
   Copy,
-  SplitSquareHorizontal,
-  Volume2,
-  VolumeX,
   Pause,
   Play,
+  Scissors,
+  Snowflake,
+  SplitSquareHorizontal,
+  Trash2,
+  Volume2,
+  VolumeX,
 } from "lucide-react";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-  TooltipProvider,
-} from "../ui/tooltip";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { toast } from "sonner";
+import { processMediaFiles } from "@/lib/media-processing";
+import { useMediaStore } from "@/stores/media-store";
+import { usePlaybackStore } from "@/stores/playback-store";
+import { useTimelineStore } from "@/stores/timeline-store";
+import { Button } from "../ui/button";
 import {
   ContextMenu,
   ContextMenuContent,
@@ -28,12 +27,7 @@ import {
   ContextMenuSeparator,
   ContextMenuTrigger,
 } from "../ui/context-menu";
-import { useTimelineStore } from "@/stores/timeline-store";
-import { useMediaStore } from "@/stores/media-store";
-import { usePlaybackStore } from "@/stores/playback-store";
-import { processMediaFiles } from "@/lib/media-processing";
-import { toast } from "sonner";
-import { useState, useRef, useEffect, useCallback } from "react";
+import { ScrollArea } from "../ui/scroll-area";
 import {
   Select,
   SelectContent,
@@ -41,6 +35,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "../ui/tooltip";
 import { TimelineTrackContent } from "./timeline-track";
 
 export function Timeline() {
@@ -106,7 +106,7 @@ export function Timeline() {
   const dynamicTimelineWidth = Math.max(
     (duration || 0) * 50 * zoomLevel, // Base width from duration
     (currentTime + 30) * 50 * zoomLevel, // Width to show current time + 30 seconds buffer
-    timelineRef.current?.clientWidth || 1000 // Minimum width
+    timelineRef.current?.clientWidth || 1000, // Minimum width
   );
 
   // Scroll synchronization and auto-scroll to playhead
@@ -128,7 +128,7 @@ export function Timeline() {
   useEffect(() => {
     const totalDuration = getTotalDuration();
     setDuration(Math.max(totalDuration, 10)); // Minimum 10 seconds for empty timeline
-  }, [tracks, setDuration, getTotalDuration]);
+  }, [setDuration, getTotalDuration]);
 
   // Keyboard event for deleting selected clips
   useEffect(() => {
@@ -201,13 +201,13 @@ export function Timeline() {
     if (!marquee || !marquee.active) return;
     const handleMouseMove = (e: MouseEvent) => {
       setMarquee(
-        (prev) => prev && { ...prev, endX: e.clientX, endY: e.clientY }
+        (prev) => prev && { ...prev, endX: e.clientX, endY: e.clientY },
       );
     };
     const handleMouseUp = (e: MouseEvent) => {
       setMarquee(
         (prev) =>
-          prev && { ...prev, endX: e.clientX, endY: e.clientY, active: false }
+          prev && { ...prev, endX: e.clientX, endY: e.clientY, active: false },
       );
     };
     window.addEventListener("mousemove", handleMouseMove);
@@ -262,12 +262,12 @@ export function Timeline() {
     if (newSelection.length > 0) {
       if (marquee.additive) {
         const selectedSet = new Set(
-          selectedClips.map((c) => c.trackId + ":" + c.clipId)
+          selectedClips.map((c) => c.trackId + ":" + c.clipId),
         );
         newSelection = [
           ...selectedClips,
           ...newSelection.filter(
-            (c) => !selectedSet.has(c.trackId + ":" + c.clipId)
+            (c) => !selectedSet.has(c.trackId + ":" + c.clipId),
           ),
         ];
       }
@@ -324,7 +324,7 @@ export function Timeline() {
 
     // Ignore timeline clip drags - they're handled by track-specific handlers
     const hasTimelineClip = e.dataTransfer.types.includes(
-      "application/x-timeline-clip"
+      "application/x-timeline-clip",
     );
     if (hasTimelineClip) {
       return;
@@ -363,14 +363,15 @@ export function Timeline() {
       try {
         const processedItems = await processMediaFiles(
           e.dataTransfer.files,
-          (p) => setProgress(p)
+          (p) => setProgress(p),
         );
         for (const processedItem of processedItems) {
           await addMediaItem(processedItem);
           const currentMediaItems = useMediaStore.getState().mediaItems;
           const addedItem = currentMediaItems.find(
             (item) =>
-              item.name === processedItem.name && item.url === processedItem.url
+              item.name === processedItem.name &&
+              item.url === processedItem.url,
           );
           if (addedItem) {
             const trackType =
@@ -415,7 +416,7 @@ export function Timeline() {
       setIsScrubbing(true);
       handleScrub(e);
     },
-    [duration, zoomLevel]
+    [duration, zoomLevel],
   );
 
   // Add new ruler mouse down handler
@@ -435,7 +436,7 @@ export function Timeline() {
       setIsScrubbing(true);
       handleScrub(e);
     },
-    [duration, zoomLevel]
+    [duration, zoomLevel],
   );
 
   const handleScrub = useCallback(
@@ -448,7 +449,7 @@ export function Timeline() {
       setScrubTime(time);
       seek(time); // update video preview in real time
     },
-    [duration, zoomLevel, seek]
+    [duration, zoomLevel, seek],
   );
 
   useEffect(() => {
@@ -696,10 +697,10 @@ export function Timeline() {
   // --- Scroll synchronization effect ---
   useEffect(() => {
     const rulerViewport = rulerScrollRef.current?.querySelector(
-      "[data-radix-scroll-area-viewport]"
+      "[data-radix-scroll-area-viewport]",
     ) as HTMLElement;
     const tracksViewport = tracksScrollRef.current?.querySelector(
-      "[data-radix-scroll-area-viewport]"
+      "[data-radix-scroll-area-viewport]",
     ) as HTMLElement;
     if (!rulerViewport || !tracksViewport) return;
     const handleRulerScroll = () => {
@@ -729,10 +730,10 @@ export function Timeline() {
   // --- Playhead auto-scroll effect ---
   useEffect(() => {
     const rulerViewport = rulerScrollRef.current?.querySelector(
-      "[data-radix-scroll-area-viewport]"
+      "[data-radix-scroll-area-viewport]",
     ) as HTMLElement;
     const tracksViewport = tracksScrollRef.current?.querySelector(
-      "[data-radix-scroll-area-viewport]"
+      "[data-radix-scroll-area-viewport]",
     ) as HTMLElement;
     if (!rulerViewport || !tracksViewport) return;
     const playheadPx = playheadPosition * 50 * zoomLevel;
@@ -742,7 +743,7 @@ export function Timeline() {
     // Center the playhead if it's not visible (100px buffer)
     const desiredScroll = Math.max(
       scrollMin,
-      Math.min(scrollMax, playheadPx - viewportWidth / 2)
+      Math.min(scrollMax, playheadPx - viewportWidth / 2),
     );
     if (
       playheadPx < rulerViewport.scrollLeft + 100 ||
@@ -754,14 +755,14 @@ export function Timeline() {
 
   return (
     <div
-      className={`h-full flex flex-col transition-colors duration-200 relative ${isDragOver ? "bg-accent/30 border-accent" : ""}`}
+      className={`relative flex h-full flex-col transition-colors duration-200 ${isDragOver ? "border-accent bg-accent/30" : ""}`}
       {...dragProps}
       onMouseEnter={() => setIsInTimeline(true)}
       onMouseLeave={() => setIsInTimeline(false)}
       onWheel={handleWheel}
     >
       {/* Toolbar */}
-      <div className="border-b flex items-center px-2 py-1 gap-1">
+      <div className="flex items-center gap-1 border-b px-2 py-1">
         <TooltipProvider delayDuration={500}>
           {/* Play/Pause Button */}
           <Tooltip>
@@ -784,11 +785,11 @@ export function Timeline() {
             </TooltipContent>
           </Tooltip>
 
-          <div className="w-px h-6 bg-border mx-1" />
+          <div className="mx-1 h-6 w-px bg-border" />
 
           {/* Time Display */}
           <div
-            className="text-xs text-muted-foreground font-mono px-2"
+            className="px-2 font-mono text-muted-foreground text-xs"
             style={{ minWidth: "18ch", textAlign: "center" }}
           >
             {currentTime.toFixed(1)}s / {duration.toFixed(1)}s
@@ -797,7 +798,7 @@ export function Timeline() {
           {/* Test Clip Button - for debugging */}
           {tracks.length === 0 && (
             <>
-              <div className="w-px h-6 bg-border mx-1" />
+              <div className="mx-1 h-6 w-px bg-border" />
               <Tooltip>
                 <TooltipTrigger asChild>
                   <Button
@@ -824,7 +825,7 @@ export function Timeline() {
             </>
           )}
 
-          <div className="w-px h-6 bg-border mx-1" />
+          <div className="mx-1 h-6 w-px bg-border" />
 
           <Tooltip>
             <TooltipTrigger asChild>
@@ -901,7 +902,7 @@ export function Timeline() {
             <TooltipContent>Delete clip (Delete)</TooltipContent>
           </Tooltip>
 
-          <div className="w-px h-6 bg-border mx-1" />
+          <div className="mx-1 h-6 w-px bg-border" />
 
           {/* Speed Control */}
           <Tooltip>
@@ -910,7 +911,7 @@ export function Timeline() {
                 value={speed.toFixed(1)}
                 onValueChange={(value) => setSpeed(parseFloat(value))}
               >
-                <SelectTrigger className="w-[90px] h-8">
+                <SelectTrigger className="h-8 w-[90px]">
                   <SelectValue placeholder="1.0x" />
                 </SelectTrigger>
                 <SelectContent>
@@ -927,25 +928,25 @@ export function Timeline() {
       </div>
 
       {/* Timeline Container */}
-      <div className="flex-1 flex flex-col overflow-hidden">
+      <div className="flex flex-1 flex-col overflow-hidden">
         {/* Timeline Header with Ruler */}
-        <div className="flex border-b bg-background sticky top-0 z-10">
+        <div className="sticky top-0 z-10 flex border-b bg-background">
           {/* Track Labels Header */}
-          <div className="w-48 flex-shrink-0 bg-muted/30 border-r flex items-center justify-between px-3 py-2">
-            <span className="text-sm font-medium text-muted-foreground">
+          <div className="flex w-48 flex-shrink-0 items-center justify-between border-r bg-muted/30 px-3 py-2">
+            <span className="font-medium text-muted-foreground text-sm">
               Tracks
             </span>
-            <div className="text-xs text-muted-foreground">
+            <div className="text-muted-foreground text-xs">
               {zoomLevel.toFixed(1)}x
             </div>
           </div>
 
           {/* Timeline Ruler */}
-          <div className="flex-1 relative overflow-hidden">
+          <div className="relative flex-1 overflow-hidden">
             <ScrollArea className="w-full" ref={rulerScrollRef}>
               <div
                 ref={timelineRef}
-                className={`relative h-12 bg-muted/30 select-none ${
+                className={`relative h-12 select-none bg-muted/30 ${
                   isDraggingRuler ? "cursor-grabbing" : "cursor-grab"
                 }`}
                 style={{
@@ -982,15 +983,15 @@ export function Timeline() {
                         key={i}
                         className={`absolute top-0 bottom-0 ${
                           isMainMarker
-                            ? "border-l border-muted-foreground/40"
-                            : "border-l border-muted-foreground/20"
+                            ? "border-muted-foreground/40 border-l"
+                            : "border-muted-foreground/20 border-l"
                         }`}
                         style={{ left: `${time * 50 * zoomLevel}px` }}
                       >
                         <span
                           className={`absolute top-1 left-1 text-xs ${
                             isMainMarker
-                              ? "text-muted-foreground font-medium"
+                              ? "font-medium text-muted-foreground"
                               : "text-muted-foreground/70"
                           }`}
                         >
@@ -1020,11 +1021,11 @@ export function Timeline() {
 
                 {/* Playhead in ruler (scrubbable) */}
                 <div
-                  className="playhead absolute top-0 bottom-0 w-0.5 bg-red-500 pointer-events-auto z-50 cursor-col-resize"
+                  className="playhead pointer-events-auto absolute top-0 bottom-0 z-50 w-0.5 cursor-col-resize bg-red-500"
                   style={{ left: `${playheadPosition * 50 * zoomLevel}px` }}
                   onMouseDown={handlePlayheadMouseDown}
                 >
-                  <div className="absolute top-1 left-1/2 transform -translate-x-1/2 w-3 h-3 bg-red-500 rounded-full border-2 border-white shadow-sm" />
+                  <div className="-translate-x-1/2 absolute top-1 left-1/2 h-3 w-3 transform rounded-full border-2 border-white bg-red-500 shadow-sm" />
                 </div>
               </div>
             </ScrollArea>
@@ -1032,19 +1033,19 @@ export function Timeline() {
         </div>
 
         {/* Tracks Area */}
-        <div className="flex-1 flex overflow-hidden">
+        <div className="flex flex-1 overflow-hidden">
           {/* Track Labels */}
           {tracks.length > 0 && (
-            <div className="w-48 flex-shrink-0 border-r bg-background overflow-y-auto">
+            <div className="w-48 flex-shrink-0 overflow-y-auto border-r bg-background">
               <div className="flex flex-col">
                 {tracks.map((track) => (
                   <div
                     key={track.id}
-                    className="h-[60px] flex items-center px-3 border-b border-muted/30 bg-background group"
+                    className="group flex h-[60px] items-center border-muted/30 border-b bg-background px-3"
                   >
-                    <div className="flex items-center flex-1 min-w-0">
+                    <div className="flex min-w-0 flex-1 items-center">
                       <div
-                        className={`w-3 h-3 rounded-full flex-shrink-0 ${
+                        className={`h-3 w-3 flex-shrink-0 rounded-full ${
                           track.type === "video"
                             ? "bg-blue-500"
                             : track.type === "audio"
@@ -1052,12 +1053,12 @@ export function Timeline() {
                               : "bg-purple-500"
                         }`}
                       />
-                      <span className="ml-2 text-sm font-medium truncate">
+                      <span className="ml-2 truncate font-medium text-sm">
                         {track.name}
                       </span>
                     </div>
                     {track.muted && (
-                      <span className="ml-2 text-xs text-red-500 font-semibold flex-shrink-0">
+                      <span className="ml-2 flex-shrink-0 font-semibold text-red-500 text-xs">
                         Muted
                       </span>
                     )}
@@ -1068,8 +1069,8 @@ export function Timeline() {
           )}
 
           {/* Timeline Tracks Content */}
-          <div className="flex-1 relative overflow-hidden">
-            <ScrollArea className="w-full h-full" ref={tracksScrollRef}>
+          <div className="relative flex-1 overflow-hidden">
+            <ScrollArea className="h-full w-full" ref={tracksScrollRef}>
               <div
                 className="relative flex-1"
                 style={{
@@ -1082,10 +1083,10 @@ export function Timeline() {
                 {tracks.length === 0 ? (
                   <div className="absolute inset-0 flex items-center justify-center">
                     <div className="text-center">
-                      <div className="w-16 h-16 rounded-full bg-muted/30 flex items-center justify-center mb-4 mx-auto">
+                      <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-muted/30">
                         <SplitSquareHorizontal className="h-8 w-8 text-muted-foreground" />
                       </div>
-                      <p className="text-sm text-muted-foreground">
+                      <p className="text-muted-foreground text-sm">
                         Drop media here to start
                       </p>
                     </div>
@@ -1096,7 +1097,7 @@ export function Timeline() {
                       <ContextMenu key={track.id}>
                         <ContextMenuTrigger asChild>
                           <div
-                            className="absolute left-0 right-0 border-b border-muted/30"
+                            className="absolute right-0 left-0 border-muted/30 border-b"
                             style={{
                               top: `${index * 60}px`,
                               height: "60px",
@@ -1105,7 +1106,7 @@ export function Timeline() {
                               // If clicking empty area (not on a clip), deselect all clips
                               if (
                                 !(e.target as HTMLElement).closest(
-                                  ".timeline-clip"
+                                  ".timeline-clip",
                                 )
                               ) {
                                 clearSelectedClips();
@@ -1126,12 +1127,12 @@ export function Timeline() {
                           >
                             {track.muted ? (
                               <>
-                                <Volume2 className="h-4 w-4 mr-2" />
+                                <Volume2 className="mr-2 h-4 w-4" />
                                 Unmute Track
                               </>
                             ) : (
                               <>
-                                <VolumeX className="h-4 w-4 mr-2" />
+                                <VolumeX className="mr-2 h-4 w-4" />
                                 Mute Track
                               </>
                             )}
@@ -1144,7 +1145,7 @@ export function Timeline() {
                             }}
                             className="text-destructive focus:text-destructive"
                           >
-                            <Trash2 className="h-4 w-4 mr-2" />
+                            <Trash2 className="mr-2 h-4 w-4" />
                             Delete Track
                           </ContextMenuItem>
                         </ContextMenuContent>
@@ -1154,7 +1155,7 @@ export function Timeline() {
                     {/* Playhead for tracks area (scrubbable) */}
                     {tracks.length > 0 && (
                       <div
-                        className="absolute top-0 w-0.5 bg-red-500 pointer-events-auto z-50 cursor-col"
+                        className="pointer-events-auto absolute top-0 z-50 w-0.5 cursor-col bg-red-500"
                         style={{
                           left: `${playheadPosition * 50 * zoomLevel}px`,
                           height: `${tracks.length * 60}px`,
@@ -1165,7 +1166,7 @@ export function Timeline() {
                   </>
                 )}
                 {isDragOver && (
-                  <div className="absolute inset-0 z-20 flex items-center justify-center pointer-events-none backdrop-blur-lg">
+                  <div className="pointer-events-none absolute inset-0 z-20 flex items-center justify-center backdrop-blur-lg">
                     <div>
                       {isProcessing
                         ? `Processing ${progress}%`

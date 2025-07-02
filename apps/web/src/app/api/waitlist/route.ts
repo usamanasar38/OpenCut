@@ -1,9 +1,9 @@
-import { NextRequest, NextResponse } from "next/server";
 import { db, eq } from "@opencut/db";
 import { waitlist } from "@opencut/db/schema";
 import { nanoid } from "nanoid";
-import { waitlistRateLimit } from "@/lib/rate-limit";
+import { type NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
+import { waitlistRateLimit } from "@/lib/rate-limit";
 
 const waitlistSchema = z.object({
   email: z.string().email("Invalid email format").min(1, "Email is required"),
@@ -17,7 +17,7 @@ export async function POST(request: NextRequest) {
   if (!success) {
     return NextResponse.json(
       { error: "Too many requests. Please try again later." },
-      { status: 429 }
+      { status: 429 },
     );
   }
 
@@ -35,7 +35,7 @@ export async function POST(request: NextRequest) {
     if (existingEmail.length > 0) {
       return NextResponse.json(
         { error: "Email already registered" },
-        { status: 409 }
+        { status: 409 },
       );
     }
 
@@ -47,7 +47,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(
       { message: "Successfully joined waitlist!" },
-      { status: 201 }
+      { status: 201 },
     );
   } catch (error) {
     if (error instanceof z.ZodError) {
@@ -58,7 +58,7 @@ export async function POST(request: NextRequest) {
     console.error("Waitlist signup error:", error);
     return NextResponse.json(
       { error: "Internal server error" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

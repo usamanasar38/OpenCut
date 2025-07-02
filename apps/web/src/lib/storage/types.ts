@@ -1,4 +1,4 @@
-import { TProject } from "@/types/project";
+import type { TProject } from "@/types/project";
 
 export interface StorageAdapter<T> {
   get(key: string): Promise<T | null>;

@@ -1,6 +1,11 @@
 "use client";
 
+import { ArrowLeft, Loader2 } from "lucide-react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { memo, Suspense } from "react";
+import { GoogleIcon } from "@/components/icons";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -9,14 +14,9 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { memo, Suspense } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
-import Link from "next/link";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { ArrowLeft, Loader2 } from "lucide-react";
-import { GoogleIcon } from "@/components/icons";
 import { useLogin } from "@/hooks/auth/useLogin";
 
 const LoginPage = () => {
@@ -35,7 +35,7 @@ const LoginPage = () => {
   } = useLogin();
 
   return (
-    <div className="flex h-screen items-center justify-center relative">
+    <div className="relative flex h-screen items-center justify-center">
       <Button
         variant="text"
         onClick={() => router.back()}
@@ -43,9 +43,9 @@ const LoginPage = () => {
       >
         <ArrowLeft className="h-5 w-5" /> Back
       </Button>
-      <Card className="w-[400px] shadow-lg border-0">
-        <CardHeader className="text-center pb-4">
-          <CardTitle className="text-2xl font-semibold">Welcome back</CardTitle>
+      <Card className="w-[400px] border-0 shadow-lg">
+        <CardHeader className="pb-4 text-center">
+          <CardTitle className="font-semibold text-2xl">Welcome back</CardTitle>
           <CardDescription className="text-base">
             Sign in to your account to continue
           </CardDescription>
@@ -116,10 +116,14 @@ const LoginPage = () => {
                 <Button
                   onClick={handleLogin}
                   disabled={isAnyLoading || !email || !password}
-                  className="w-full h-11"
+                  className="h-11 w-full"
                   size="lg"
                 >
-                  {isEmailLoading ? <Loader2 className="animate-spin" /> : "Sign in"}
+                  {isEmailLoading ? (
+                    <Loader2 className="animate-spin" />
+                  ) : (
+                    "Sign in"
+                  )}
                 </Button>
               </div>
             </div>
@@ -137,6 +141,6 @@ const LoginPage = () => {
       </Card>
     </div>
   );
-}
+};
 
 export default memo(LoginPage);

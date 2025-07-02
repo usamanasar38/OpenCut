@@ -3,7 +3,7 @@
 // Helper function to format time in various formats (MM:SS, HH:MM:SS, HH:MM:SS:CS)
 export const formatTimeCode = (
   timeInSeconds: number,
-  format: "MM:SS" | "HH:MM:SS" | "HH:MM:SS:CS" = "HH:MM:SS:CS"
+  format: "MM:SS" | "HH:MM:SS" | "HH:MM:SS:CS" = "HH:MM:SS:CS",
 ): string => {
   const hours = Math.floor(timeInSeconds / 3600);
   const minutes = Math.floor((timeInSeconds % 3600) / 60);

@@ -1,11 +1,15 @@
 "use client";
 
-import { useRef, useState, useEffect } from "react";
-import { useTimelineStore } from "@/stores/timeline-store";
-import { useMediaStore } from "@/stores/media-store";
-import { toast } from "sonner";
 import { Copy, Scissors, Trash2 } from "lucide-react";
-import { TimelineClip } from "./timeline-clip";
+import { useEffect, useRef, useState } from "react";
+import { toast } from "sonner";
+import { useMediaStore } from "@/stores/media-store";
+import { usePlaybackStore } from "@/stores/playback-store";
+import {
+  type TimelineTrack,
+  type TimelineClip as TypeTimelineClip,
+  useTimelineStore,
+} from "@/stores/timeline-store";
 import {
   ContextMenu,
   ContextMenuContent,
@@ -13,11 +17,7 @@ import {
   ContextMenuSeparator,
   ContextMenuTrigger,
 } from "../ui/context-menu";
-import {
-  TimelineTrack,
-  TimelineClip as TypeTimelineClip,
-} from "@/stores/timeline-store";
-import { usePlaybackStore } from "@/stores/playback-store";
+import { TimelineClip } from "./timeline-clip";
 
 export function TimelineTrackContent({
   track,
@@ -62,7 +62,7 @@ export function TimelineTrackContent({
       if (dragState.clipId && dragState.trackId) {
         const isSelected = selectedClips.some(
           (c) =>
-            c.trackId === dragState.trackId && c.clipId === dragState.clipId
+            c.trackId === dragState.trackId && c.clipId === dragState.clipId,
         );
 
         if (!isSelected) {
@@ -88,7 +88,7 @@ export function TimelineTrackContent({
       // Check for overlaps and update position
       const sourceTrack = tracks.find((t) => t.id === dragState.trackId);
       const movingClip = sourceTrack?.clips.find(
-        (c) => c.id === dragState.clipId
+        (c) => c.id === dragState.clipId,
       );
 
       if (movingClip) {
@@ -160,7 +160,7 @@ export function TimelineTrackContent({
     if (isRightClick) {
       // Handle right-click selection
       const isSelected = selectedClips.some(
-        (c) => c.trackId === track.id && c.clipId === clip.id
+        (c) => c.trackId === track.id && c.clipId === clip.id,
       );
 
       // If clip is not selected, select it (keep other selections if multi-select)
@@ -189,7 +189,7 @@ export function TimelineTrackContent({
       track.id,
       e.clientX,
       clip.startTime,
-      clickOffsetTime
+      clickOffsetTime,
     );
   };
 
@@ -214,7 +214,7 @@ export function TimelineTrackContent({
 
     // Handle single selection/deselection
     const isSelected = selectedClips.some(
-      (c) => c.trackId === track.id && c.clipId === clip.id
+      (c) => c.trackId === track.id && c.clipId === clip.id,
     );
 
     if (isSelected) {
@@ -231,10 +231,10 @@ export function TimelineTrackContent({
 
     // Handle both timeline clips and media items
     const hasTimelineClip = e.dataTransfer.types.includes(
-      "application/x-timeline-clip"
+      "application/x-timeline-clip",
     );
     const hasMediaItem = e.dataTransfer.types.includes(
-      "application/x-media-item"
+      "application/x-media-item",
     );
 
     if (!hasTimelineClip && !hasMediaItem) return;
@@ -242,7 +242,7 @@ export function TimelineTrackContent({
     if (hasMediaItem) {
       try {
         const mediaItemData = e.dataTransfer.getData(
-          "application/x-media-item"
+          "application/x-media-item",
         );
         if (mediaItemData) {
           const { type } = JSON.parse(mediaItemData);
@@ -263,7 +263,7 @@ export function TimelineTrackContent({
 
     // Calculate drop position for overlap checking
     const trackContainer = e.currentTarget.querySelector(
-      ".track-clips-container"
+      ".track-clips-container",
     ) as HTMLElement;
     let dropTime = 0;
     if (trackContainer) {
@@ -278,7 +278,7 @@ export function TimelineTrackContent({
     if (hasMediaItem) {
       try {
         const mediaItemData = e.dataTransfer.getData(
-          "application/x-media-item"
+          "application/x-media-item",
         );
         if (mediaItemData) {
           const { id } = JSON.parse(mediaItemData);
@@ -305,15 +305,15 @@ export function TimelineTrackContent({
     } else if (hasTimelineClip) {
       try {
         const timelineClipData = e.dataTransfer.getData(
-          "application/x-timeline-clip"
+          "application/x-timeline-clip",
         );
         if (timelineClipData) {
           const { clipId, trackId: fromTrackId } = JSON.parse(timelineClipData);
           const sourceTrack = tracks.find(
-            (t: TimelineTrack) => t.id === fromTrackId
+            (t: TimelineTrack) => t.id === fromTrackId,
           );
           const movingClip = sourceTrack?.clips.find(
-            (c: any) => c.id === clipId
+            (c: any) => c.id === clipId,
           );
 
           if (movingClip) {
@@ -357,10 +357,10 @@ export function TimelineTrackContent({
     e.preventDefault();
 
     const hasTimelineClip = e.dataTransfer.types.includes(
-      "application/x-timeline-clip"
+      "application/x-timeline-clip",
     );
     const hasMediaItem = e.dataTransfer.types.includes(
-      "application/x-media-item"
+      "application/x-media-item",
     );
 
     if (!hasTimelineClip && !hasMediaItem) return;
@@ -373,10 +373,10 @@ export function TimelineTrackContent({
     e.preventDefault();
 
     const hasTimelineClip = e.dataTransfer.types.includes(
-      "application/x-timeline-clip"
+      "application/x-timeline-clip",
     );
     const hasMediaItem = e.dataTransfer.types.includes(
-      "application/x-media-item"
+      "application/x-media-item",
     );
 
     if (!hasTimelineClip && !hasMediaItem) return;
@@ -402,16 +402,16 @@ export function TimelineTrackContent({
     setDropPosition(null);
 
     const hasTimelineClip = e.dataTransfer.types.includes(
-      "application/x-timeline-clip"
+      "application/x-timeline-clip",
     );
     const hasMediaItem = e.dataTransfer.types.includes(
-      "application/x-media-item"
+      "application/x-media-item",
     );
 
     if (!hasTimelineClip && !hasMediaItem) return;
 
     const trackContainer = e.currentTarget.querySelector(
-      ".track-clips-container"
+      ".track-clips-container",
     ) as HTMLElement;
     if (!trackContainer) return;
 
@@ -424,7 +424,7 @@ export function TimelineTrackContent({
       if (hasTimelineClip) {
         // Handle timeline clip movement
         const timelineClipData = e.dataTransfer.getData(
-          "application/x-timeline-clip"
+          "application/x-timeline-clip",
         );
         if (!timelineClipData) return;
 
@@ -436,10 +436,10 @@ export function TimelineTrackContent({
 
         // Find the clip being moved
         const sourceTrack = tracks.find(
-          (t: TimelineTrack) => t.id === fromTrackId
+          (t: TimelineTrack) => t.id === fromTrackId,
         );
         const movingClip = sourceTrack?.clips.find(
-          (c: TypeTimelineClip) => c.id === clipId
+          (c: TypeTimelineClip) => c.id === clipId,
         );
 
         if (!movingClip) {
@@ -451,7 +451,7 @@ export function TimelineTrackContent({
         const adjustedStartTime = snappedTime - clickOffsetTime;
         const finalStartTime = Math.max(
           0,
-          Math.round(adjustedStartTime * 10) / 10
+          Math.round(adjustedStartTime * 10) / 10,
         );
 
         // Check for overlaps with existing clips (excluding the moving clip itself)
@@ -477,7 +477,7 @@ export function TimelineTrackContent({
 
         if (hasOverlap) {
           toast.error(
-            "Cannot move clip here - it would overlap with existing clips"
+            "Cannot move clip here - it would overlap with existing clips",
           );
           return;
         }
@@ -495,7 +495,7 @@ export function TimelineTrackContent({
       } else if (hasMediaItem) {
         // Handle media item drop
         const mediaItemData = e.dataTransfer.getData(
-          "application/x-media-item"
+          "application/x-media-item",
         );
         if (!mediaItemData) return;
 
@@ -535,7 +535,7 @@ export function TimelineTrackContent({
 
         if (hasOverlap) {
           toast.error(
-            "Cannot place clip here - it would overlap with existing clips"
+            "Cannot place clip here - it would overlap with existing clips",
           );
           return;
         }
@@ -557,7 +557,7 @@ export function TimelineTrackContent({
 
   return (
     <div
-      className="w-full h-full hover:bg-muted/20"
+      className="h-full w-full hover:bg-muted/20"
       onClick={(e) => {
         // If clicking empty area (not on a clip), deselect all clips
         if (!(e.target as HTMLElement).closest(".timeline-clip")) {
@@ -572,11 +572,11 @@ export function TimelineTrackContent({
     >
       <div
         ref={timelineRef}
-        className="h-full relative track-clips-container min-w-full"
+        className="track-clips-container relative h-full min-w-full"
       >
         {track.clips.length === 0 ? (
           <div
-            className={`h-full w-full rounded-sm border-2 border-dashed flex items-center justify-center text-xs text-muted-foreground transition-colors ${
+            className={`flex h-full w-full items-center justify-center rounded-sm border-2 border-dashed text-muted-foreground text-xs transition-colors ${
               isDropping
                 ? wouldOverlap
                   ? "border-red-500 bg-red-500/10 text-red-600"
@@ -594,7 +594,7 @@ export function TimelineTrackContent({
           <>
             {track.clips.map((clip) => {
               const isSelected = selectedClips.some(
-                (c) => c.trackId === track.id && c.clipId === clip.id
+                (c) => c.trackId === track.id && c.clipId === clip.id,
               );
 
               const handleClipSplit = () => {
@@ -611,7 +611,7 @@ export function TimelineTrackContent({
                     track.id,
                     clip.id,
                     clip.trimStart,
-                    clip.trimEnd + (effectiveEnd - splitTime)
+                    clip.trimEnd + (effectiveEnd - splitTime),
                   );
                   addClipToTrack(track.id, {
                     mediaId: clip.mediaId,
@@ -665,11 +665,11 @@ export function TimelineTrackContent({
                   </ContextMenuTrigger>
                   <ContextMenuContent>
                     <ContextMenuItem onClick={handleClipSplit}>
-                      <Scissors className="h-4 w-4 mr-2" />
+                      <Scissors className="mr-2 h-4 w-4" />
                       Split at Playhead
                     </ContextMenuItem>
                     <ContextMenuItem onClick={handleClipDuplicate}>
-                      <Copy className="h-4 w-4 mr-2" />
+                      <Copy className="mr-2 h-4 w-4" />
                       Duplicate Clip
                     </ContextMenuItem>
                     <ContextMenuSeparator />
@@ -677,7 +677,7 @@ export function TimelineTrackContent({
                       onClick={handleClipDelete}
                       className="text-destructive focus:text-destructive"
                     >
-                      <Trash2 className="h-4 w-4 mr-2" />
+                      <Trash2 className="mr-2 h-4 w-4" />
                       Delete Clip
                     </ContextMenuItem>
                   </ContextMenuContent>

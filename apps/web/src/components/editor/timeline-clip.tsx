@@ -1,33 +1,33 @@
 "use client";
 
-import { useState } from "react";
-import { Button } from "../ui/button";
 import {
-  MoreVertical,
-  Scissors,
-  Trash2,
-  SplitSquareHorizontal,
-  Music,
-  ChevronRight,
   ChevronLeft,
+  ChevronRight,
+  MoreVertical,
+  Music,
+  Scissors,
+  SplitSquareHorizontal,
+  Trash2,
 } from "lucide-react";
-import { useMediaStore } from "@/stores/media-store";
-import { useTimelineStore } from "@/stores/timeline-store";
-import { usePlaybackStore } from "@/stores/playback-store";
-import AudioWaveform from "./audio-waveform";
+import { useState } from "react";
 import { toast } from "sonner";
-import { TimelineClipProps, ResizeState } from "@/types/timeline";
+import { useMediaStore } from "@/stores/media-store";
+import { usePlaybackStore } from "@/stores/playback-store";
+import { useTimelineStore } from "@/stores/timeline-store";
+import type { ResizeState, TimelineClipProps } from "@/types/timeline";
+import { Button } from "../ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
-  DropdownMenuTrigger,
   DropdownMenuSub,
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
+  DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
-import { isDragging } from "motion/react";
+import AudioWaveform from "./audio-waveform";
+import Image from "next/image";
 
 export function TimelineClip({
   clip,
@@ -40,7 +40,6 @@ export function TimelineClip({
   const { mediaItems } = useMediaStore();
   const {
     updateClipTrim,
-    addClipToTrack,
     removeClipFromTrack,
     dragState,
     splitClip,
@@ -81,7 +80,7 @@ export function TimelineClip({
   const handleResizeStart = (
     e: React.MouseEvent,
     clipId: string,
-    side: "left" | "right"
+    side: "left" | "right",
   ) => {
     e.stopPropagation();
     e.preventDefault();
@@ -106,8 +105,8 @@ export function TimelineClip({
         0,
         Math.min(
           clip.duration - clip.trimEnd - 0.1,
-          resizing.initialTrimStart + deltaTime
-        )
+          resizing.initialTrimStart + deltaTime,
+        ),
       );
       updateClipTrim(track.id, clip.id, newTrimStart, clip.trimEnd);
     } else {
@@ -115,8 +114,8 @@ export function TimelineClip({
         0,
         Math.min(
           clip.duration - clip.trimStart - 0.1,
-          resizing.initialTrimEnd - deltaTime
-        )
+          resizing.initialTrimEnd - deltaTime,
+        ),
       );
       updateClipTrim(track.id, clip.id, clip.trimStart, newTrimEnd);
     }
@@ -219,17 +218,17 @@ export function TimelineClip({
 
     if (!mediaItem) {
       return (
-        <span className="text-xs text-foreground/80 truncate">{clip.name}</span>
+        <span className="truncate text-foreground/80 text-xs">{clip.name}</span>
       );
     }
 
     if (mediaItem.type === "image") {
       return (
-        <div className="w-full h-full flex items-center justify-center">
-          <img
+        <div className="flex h-full w-full items-center justify-center">
+          <Image
             src={mediaItem.url}
             alt={mediaItem.name}
-            className="w-full h-full object-cover"
+            className="h-full w-full object-cover"
             draggable={false}
           />
         </div>
@@ -238,16 +237,16 @@ export function TimelineClip({
 
     if (mediaItem.type === "video" && mediaItem.thumbnailUrl) {
       return (
-        <div className="w-full h-full flex items-center gap-2">
-          <div className="w-8 h-8 flex-shrink-0">
-            <img
+        <div className="flex h-full w-full items-center gap-2">
+          <div className="h-8 w-8 flex-shrink-0">
+            <Image
               src={mediaItem.thumbnailUrl}
               alt={mediaItem.name}
-              className="w-full h-full object-cover rounded-sm"
+              className="h-full w-full rounded-sm object-cover"
               draggable={false}
             />
           </div>
-          <span className="text-xs text-foreground/80 truncate flex-1">
+          <span className="flex-1 truncate text-foreground/80 text-xs">
             {clip.name}
           </span>
         </div>
@@ -256,8 +255,8 @@ export function TimelineClip({
 
     if (mediaItem.type === "audio") {
       return (
-        <div className="w-full h-full flex items-center gap-2">
-          <div className="flex-1 min-w-0">
+        <div className="flex h-full w-full items-center gap-2">
+          <div className="min-w-0 flex-1">
             <AudioWaveform
               audioUrl={mediaItem.url}
               height={24}
@@ -269,7 +268,7 @@ export function TimelineClip({
     }
 
     return (
-      <span className="text-xs text-foreground/80 truncate">{clip.name}</span>
+      <span className="truncate text-foreground/80 text-xs">{clip.name}</span>
     );
   };
 
@@ -293,9 +292,9 @@ export function TimelineClip({
       onMouseLeave={resizing ? handleResizeEnd : undefined}
     >
       <div
-        className={`relative h-full rounded-[0.15rem] cursor-pointer overflow-hidden ${getTrackColor(
-          track.type
-        )} ${isSelected ? "border-b-[0.5px] border-t-[0.5px] border-primary" : ""} ${
+        className={`relative h-full cursor-pointer overflow-hidden rounded-[0.15rem] ${getTrackColor(
+          track.type,
+        )} ${isSelected ? "border-primary border-t-[0.5px] border-b-[0.5px]" : ""} ${
           isBeingDragged ? "z-50" : "z-10"
         }`}
         onClick={(e) => onClipClick && onClipClick(e, clip)}
@@ -309,11 +308,11 @@ export function TimelineClip({
         {isSelected && (
           <>
             <div
-              className="absolute left-0 top-0 bottom-0 w-1 cursor-w-resize bg-foreground z-50"
+              className="absolute top-0 bottom-0 left-0 z-50 w-1 cursor-w-resize bg-foreground"
               onMouseDown={(e) => handleResizeStart(e, clip.id, "left")}
             />
             <div
-              className="absolute right-0 top-0 bottom-0 w-1 cursor-e-resize bg-foreground z-50"
+              className="absolute top-0 right-0 bottom-0 z-50 w-1 cursor-e-resize bg-foreground"
               onMouseDown={(e) => handleResizeStart(e, clip.id, "right")}
             />
           </>
@@ -325,7 +324,7 @@ export function TimelineClip({
               <Button
                 variant="outline"
                 size="sm"
-                className="h-6 w-6 p-0 opacity-0 group-hover:opacity-100 transition-opacity bg-background/80 hover:bg-background"
+                className="h-6 w-6 bg-background/80 p-0 opacity-0 transition-opacity hover:bg-background group-hover:opacity-100"
                 onClick={(e) => {
                   e.stopPropagation();
                   setClipMenuOpen(true);

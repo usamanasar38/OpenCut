@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import type { PlaybackState, PlaybackControls } from "@/types/playback";
+import type { PlaybackControls, PlaybackState } from "@/types/playback";
 
 interface PlaybackStore extends PlaybackState, PlaybackControls {
   setDuration: (duration: number) => void;
@@ -26,13 +26,13 @@ const startTimer = (store: () => PlaybackStore) => {
         state.setCurrentTime(0);
         // Notify video elements to sync with reset
         window.dispatchEvent(
-          new CustomEvent("playback-seek", { detail: { time: 0 } })
+          new CustomEvent("playback-seek", { detail: { time: 0 } }),
         );
       } else {
         state.setCurrentTime(newTime);
         // Notify video elements to sync
         window.dispatchEvent(
-          new CustomEvent("playback-update", { detail: { time: newTime } })
+          new CustomEvent("playback-update", { detail: { time: newTime } }),
         );
       }
     }

@@ -1,12 +1,12 @@
 "use client";
 
-import Link from "next/link";
-import { Button } from "./ui/button";
 import { ChevronLeft, Download } from "lucide-react";
-import { useTimelineStore } from "@/stores/timeline-store";
-import { HeaderBase } from "./header-base";
+import Link from "next/link";
 import { formatTimeCode } from "@/lib/time";
 import { useProjectStore } from "@/stores/project-store";
+import { useTimelineStore } from "@/stores/timeline-store";
+import { HeaderBase } from "./header-base";
+import { Button } from "./ui/button";
 
 export function EditorHeader() {
   const { getTotalDuration } = useTimelineStore();
@@ -21,7 +21,7 @@ export function EditorHeader() {
     <div className="flex items-center gap-2">
       <Link
         href="/projects"
-        className="font-medium tracking-tight flex items-center gap-2 hover:opacity-80 transition-opacity"
+        className="flex items-center gap-2 font-medium tracking-tight transition-opacity hover:opacity-80"
       >
         <ChevronLeft className="h-4 w-4" />
         <span className="text-sm">{activeProject?.name}</span>
@@ -30,7 +30,7 @@ export function EditorHeader() {
   );
 
   const centerContent = (
-    <div className="flex items-center gap-2 text-xs text-muted-foreground">
+    <div className="flex items-center gap-2 text-muted-foreground text-xs">
       <span>{formatTimeCode(getTotalDuration(), "HH:MM:SS:CS")}</span>
     </div>
   );
@@ -49,7 +49,7 @@ export function EditorHeader() {
       leftContent={leftContent}
       centerContent={centerContent}
       rightContent={rightContent}
-      className="bg-background border-b"
+      className="border-b bg-background"
     />
   );
 }

@@ -1,7 +1,7 @@
-import { TProject } from "@/types/project";
+import { toast } from "sonner";
 import { create } from "zustand";
 import { storageService } from "@/lib/storage/storage-service";
-import { toast } from "sonner";
+import type { TProject } from "@/types/project";
 
 interface ProjectStore {
   activeProject: TProject | null;

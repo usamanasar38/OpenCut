@@ -1,14 +1,12 @@
 "use client";
 
-import { motion } from "motion/react";
-import { Button } from "../ui/button";
-import { Input } from "../ui/input";
 import { ArrowRight } from "lucide-react";
-import Link from "next/link";
+import { motion } from "motion/react";
+import Image from "next/image";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
-
-import Image from "next/image";
+import { Button } from "../ui/button";
+import { Input } from "../ui/input";
 
 interface HeroProps {
   signupCount: number;
@@ -57,7 +55,7 @@ export function Hero({ signupCount }: HeroProps) {
           variant: "destructive",
         });
       }
-    } catch (error) {
+    } catch (_error) {
       toast({
         title: "Network error",
         description: "Please check your connection and try again.",
@@ -69,9 +67,9 @@ export function Hero({ signupCount }: HeroProps) {
   };
 
   return (
-    <div className="min-h-[calc(100vh-4.5rem)] supports-[height:100dvh]:min-h-[calc(100dvh-4.5rem)] flex flex-col justify-between items-center text-center px-4">
+    <div className="flex min-h-[calc(100vh-4.5rem)] flex-col items-center justify-between px-4 text-center supports-[height:100dvh]:min-h-[calc(100dvh-4.5rem)]">
       <Image
-        className="absolute top-0 left-0 -z-50 size-full object-cover"
+        className="-z-50 absolute top-0 left-0 size-full object-cover"
         src="/landing-page-bg.png"
         height={1903.5}
         width={1269}
@@ -81,17 +79,17 @@ export function Hero({ signupCount }: HeroProps) {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 1 }}
-        className="max-w-3xl mx-auto w-full flex-1 flex flex-col justify-center"
+        className="mx-auto flex w-full max-w-3xl flex-1 flex-col justify-center"
       >
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2, duration: 0.8 }}
-          className="inline-block font-bold tracking-tighter text-4xl md:text-[4rem]"
+          className="inline-block font-bold text-4xl tracking-tighter md:text-[4rem]"
         >
           <h1>The Open Source</h1>
-          <div className="flex justify-center gap-4 leading-[4rem] mt-0 md:mt-2">
-            <div className="relative -rotate-[2.76deg] max-w-[250px] md:max-w-[454px] mt-2">
+          <div className="mt-0 flex justify-center gap-4 leading-[4rem] md:mt-2">
+            <div className="-rotate-[2.76deg] relative mt-2 max-w-[250px] md:max-w-[454px]">
               <Image src="/frame.svg" height={79} width={459} alt="frame" />
               <span className="absolute inset-0 flex items-center justify-center">
                 Video Editor
@@ -101,7 +99,7 @@ export function Hero({ signupCount }: HeroProps) {
         </motion.div>
 
         <motion.p
-          className="mt-10 text-base sm:text-xl text-muted-foreground font-light tracking-wide max-w-xl mx-auto"
+          className="mx-auto mt-10 max-w-xl font-light text-base text-muted-foreground tracking-wide sm:text-xl"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.4, duration: 0.8 }}
@@ -111,19 +109,19 @@ export function Hero({ signupCount }: HeroProps) {
         </motion.p>
 
         <motion.div
-          className="mt-12 flex gap-8 justify-center"
+          className="mt-12 flex justify-center gap-8"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.6, duration: 0.8 }}
         >
           <form
             onSubmit={handleSubmit}
-            className="flex gap-3 w-full max-w-lg flex-col sm:flex-row"
+            className="flex w-full max-w-lg flex-col gap-3 sm:flex-row"
           >
             <Input
               type="email"
               placeholder="Enter your email"
-              className="h-11 text-base flex-1"
+              className="h-11 flex-1 text-base"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               disabled={isSubmitting}
@@ -132,13 +130,13 @@ export function Hero({ signupCount }: HeroProps) {
             <Button
               type="submit"
               size="lg"
-              className="px-6 h-11 text-base"
+              className="h-11 px-6 text-base"
               disabled={isSubmitting}
             >
               <span className="relative z-10">
                 {isSubmitting ? "Joining..." : "Join waitlist"}
               </span>
-              <ArrowRight className="relative z-10 ml-0.5 h-4 w-4 inline-block" />
+              <ArrowRight className="relative z-10 ml-0.5 inline-block h-4 w-4" />
             </Button>
           </form>
         </motion.div>
@@ -148,9 +146,9 @@ export function Hero({ signupCount }: HeroProps) {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.8, duration: 0.6 }}
-            className="mt-8 inline-flex items-center gap-2 text-sm text-muted-foreground justify-center"
+            className="mt-8 inline-flex items-center justify-center gap-2 text-muted-foreground text-sm"
           >
-            <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
+            <div className="h-2 w-2 animate-pulse rounded-full bg-green-500" />
             <span>{signupCount.toLocaleString()} people already joined</span>
           </motion.div>
         )}

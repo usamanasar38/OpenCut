@@ -1,9 +1,9 @@
 "use client";
 
-import * as React from "react";
-import { DropdownMenu as DropdownMenuPrimitive } from "radix-ui";
-import { Check, ChevronRight, Circle } from "lucide-react";
 import { cva, type VariantProps } from "class-variance-authority";
+import { Check, ChevronRight, Circle } from "lucide-react";
+import { DropdownMenu as DropdownMenuPrimitive } from "radix-ui";
+import * as React from "react";
 
 import { cn } from "../../lib/utils";
 
@@ -24,14 +24,14 @@ const dropdownMenuItemVariants = cva(
   {
     variants: {
       variant: {
-        default: "focus:opacity-65 focus:text-accent-foreground",
+        default: "focus:text-accent-foreground focus:opacity-65",
         destructive: "text-destructive focus:text-destructive/80",
       },
     },
     defaultVariants: {
       variant: "default",
     },
-  }
+  },
 );
 
 const DropdownMenuSubTrigger = React.forwardRef<
@@ -47,7 +47,7 @@ const DropdownMenuSubTrigger = React.forwardRef<
       dropdownMenuItemVariants({ variant }),
       "data-[state=open]:bg-accent data-[state=open]:opacity-65",
       inset && "pl-8",
-      className
+      className,
     )}
     {...props}
   >
@@ -65,8 +65,8 @@ const DropdownMenuSubContent = React.forwardRef<
   <DropdownMenuPrimitive.SubContent
     ref={ref}
     className={cn(
-      "z-50 min-w-[8rem] overflow-hidden rounded-md border bg-popover p-1 text-popover-foreground shadow-lg data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
-      className
+      "data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 z-50 min-w-[8rem] overflow-hidden rounded-md border bg-popover p-1 text-popover-foreground shadow-lg data-[state=closed]:animate-out data-[state=open]:animate-in",
+      className,
     )}
     {...props}
   />
@@ -83,9 +83,9 @@ const DropdownMenuContent = React.forwardRef<
       ref={ref}
       sideOffset={sideOffset}
       className={cn(
-        "z-50 min-w-[8rem] overflow-hidden rounded-md border p-1 bg-popover text-popover-foreground shadow-md",
-        "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
-        className
+        "z-50 min-w-[8rem] overflow-hidden rounded-md border bg-popover p-1 text-popover-foreground shadow-md",
+        "data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 data-[state=closed]:animate-out data-[state=open]:animate-in",
+        className,
       )}
       {...props}
     />
@@ -105,7 +105,7 @@ const DropdownMenuItem = React.forwardRef<
     className={cn(
       dropdownMenuItemVariants({ variant }),
       inset && "pl-8",
-      className
+      className,
     )}
     {...props}
   />
@@ -122,8 +122,8 @@ const DropdownMenuCheckboxItem = React.forwardRef<
     ref={ref}
     className={cn(
       dropdownMenuItemVariants({ variant }),
-      "pl-8 pr-2",
-      className
+      "pr-2 pl-8",
+      className,
     )}
     checked={checked}
     {...props}
@@ -149,8 +149,8 @@ const DropdownMenuRadioItem = React.forwardRef<
     ref={ref}
     className={cn(
       dropdownMenuItemVariants({ variant }),
-      "pl-8 pr-2",
-      className
+      "pr-2 pl-8",
+      className,
     )}
     {...props}
   >
@@ -173,9 +173,9 @@ const DropdownMenuLabel = React.forwardRef<
   <DropdownMenuPrimitive.Label
     ref={ref}
     className={cn(
-      "px-2 py-1.5 text-sm font-semibold",
+      "px-2 py-1.5 font-semibold text-sm",
       inset && "pl-8",
-      className
+      className,
     )}
     {...props}
   />

@@ -40,6 +40,6 @@ export const usePanelStore = create<PanelState>()(
     }),
     {
       name: "panel-sizes",
-    }
-  )
+    },
+  ),
 );

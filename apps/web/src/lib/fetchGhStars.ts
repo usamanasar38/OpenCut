@@ -4,7 +4,7 @@ export async function getStars(): Promise<string> {
       "https://api.github.com/repos/OpenCut-app/OpenCut",
       {
         next: { revalidate: 3600 },
-      }
+      },
     );
 
     if (!res.ok) {

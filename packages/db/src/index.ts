@@ -20,25 +20,24 @@ function getDb() {
 
 // Export a proxy that forwards all calls to the actual db instance
 export const db = new Proxy({} as ReturnType<typeof drizzle>, {
-  get(target, prop) {
+  get(_target, prop) {
     return getDb()[prop as keyof typeof _db];
   },
 });
 
-// Re-export schema for convenience
-export * from "./schema";
-
 // Re-export drizzle-orm functions to ensure version consistency
 export {
-  eq,
   and,
-  or,
-  not,
-  isNull,
-  isNotNull,
-  inArray,
-  notInArray,
+  eq,
   exists,
+  inArray,
+  isNotNull,
+  isNull,
+  not,
   notExists,
+  notInArray,
+  or,
   sql,
 } from "drizzle-orm";
+// Re-export schema for convenience
+export * from "./schema";

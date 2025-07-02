@@ -1,12 +1,12 @@
 import { create } from "zustand";
 import type { TrackType } from "@/types/timeline";
 import { useEditorStore } from "./editor-store";
-import { useMediaStore, getMediaAspectRatio } from "./media-store";
+import { getMediaAspectRatio, useMediaStore } from "./media-store";
 
 // Helper function to manage clip naming with suffixes
 const getClipNameWithSuffix = (
   originalName: string,
-  suffix: string
+  suffix: string,
 ): string => {
   // Remove existing suffixes to prevent accumulation
   const baseName = originalName
@@ -64,7 +64,7 @@ interface TimelineStore {
     trackId: string,
     startMouseX: number,
     startClipTime: number,
-    clickOffsetTime: number
+    clickOffsetTime: number,
   ) => void;
   updateDragTime: (currentTime: number) => void;
   endDrag: () => void;
@@ -77,18 +77,18 @@ interface TimelineStore {
   moveClipToTrack: (
     fromTrackId: string,
     toTrackId: string,
-    clipId: string
+    clipId: string,
   ) => void;
   updateClipTrim: (
     trackId: string,
     clipId: string,
     trimStart: number,
-    trimEnd: number
+    trimEnd: number,
   ) => void;
   updateClipStartTime: (
     trackId: string,
     clipId: string,
-    startTime: number
+    startTime: number,
   ) => void;
   toggleTrackMute: (trackId: string) => void;
 
@@ -96,17 +96,17 @@ interface TimelineStore {
   splitClip: (
     trackId: string,
     clipId: string,
-    splitTime: number
+    splitTime: number,
   ) => string | null;
   splitAndKeepLeft: (
     trackId: string,
     clipId: string,
-    splitTime: number
+    splitTime: number,
   ) => void;
   splitAndKeepRight: (
     trackId: string,
     clipId: string,
-    splitTime: number
+    splitTime: number,
   ) => void;
   separateAudio: (trackId: string, clipId: string) => string | null;
 
@@ -126,7 +126,7 @@ export const useTimelineStore = create<TimelineStore>((set, get) => ({
   selectedClips: [],
 
   pushHistory: () => {
-    const { tracks, history, redoStack } = get();
+    const { tracks, history } = get();
     set({
       history: [...history, JSON.parse(JSON.stringify(tracks))],
       redoStack: [],
@@ -147,13 +147,13 @@ export const useTimelineStore = create<TimelineStore>((set, get) => ({
   selectClip: (trackId, clipId, multi = false) => {
     set((state) => {
       const exists = state.selectedClips.some(
-        (c) => c.trackId === trackId && c.clipId === clipId
+        (c) => c.trackId === trackId && c.clipId === clipId,
       );
       if (multi) {
         return exists
           ? {
               selectedClips: state.selectedClips.filter(
-                (c) => !(c.trackId === trackId && c.clipId === clipId)
+                (c) => !(c.trackId === trackId && c.clipId === clipId),
               ),
             }
           : { selectedClips: [...state.selectedClips, { trackId, clipId }] };
@@ -166,7 +166,7 @@ export const useTimelineStore = create<TimelineStore>((set, get) => ({
   deselectClip: (trackId, clipId) => {
     set((state) => ({
       selectedClips: state.selectedClips.filter(
-        (c) => !(c.trackId === trackId && c.clipId === clipId)
+        (c) => !(c.trackId === trackId && c.clipId === clipId),
       ),
     }));
   },
@@ -206,7 +206,7 @@ export const useTimelineStore = create<TimelineStore>((set, get) => ({
     const currentState = get();
     const totalClipsInTimeline = currentState.tracks.reduce(
       (total, track) => total + track.clips.length,
-      0
+      0,
     );
     const isFirstClip = totalClipsInTimeline === 0;
 
@@ -223,7 +223,7 @@ export const useTimelineStore = create<TimelineStore>((set, get) => ({
     if (isFirstClip && clipData.mediaId) {
       const mediaStore = useMediaStore.getState();
       const mediaItem = mediaStore.mediaItems.find(
-        (item) => item.id === clipData.mediaId
+        (item) => item.id === clipData.mediaId,
       );
 
       if (
@@ -232,7 +232,7 @@ export const useTimelineStore = create<TimelineStore>((set, get) => ({
       ) {
         const editorStore = useEditorStore.getState();
         editorStore.setCanvasSizeFromAspectRatio(
-          getMediaAspectRatio(mediaItem)
+          getMediaAspectRatio(mediaItem),
         );
       }
     }
@@ -241,7 +241,7 @@ export const useTimelineStore = create<TimelineStore>((set, get) => ({
       tracks: state.tracks.map((track) =>
         track.id === trackId
           ? { ...track, clips: [...track.clips, newClip] }
-          : track
+          : track,
       ),
     }));
   },
@@ -256,7 +256,7 @@ export const useTimelineStore = create<TimelineStore>((set, get) => ({
                 ...track,
                 clips: track.clips.filter((clip) => clip.id !== clipId),
               }
-            : track
+            : track,
         )
         .filter((track) => track.clips.length > 0),
     }));
@@ -299,10 +299,10 @@ export const useTimelineStore = create<TimelineStore>((set, get) => ({
           ? {
               ...track,
               clips: track.clips.map((clip) =>
-                clip.id === clipId ? { ...clip, trimStart, trimEnd } : clip
+                clip.id === clipId ? { ...clip, trimStart, trimEnd } : clip,
               ),
             }
-          : track
+          : track,
       ),
     }));
   },
@@ -315,10 +315,10 @@ export const useTimelineStore = create<TimelineStore>((set, get) => ({
           ? {
               ...track,
               clips: track.clips.map((clip) =>
-                clip.id === clipId ? { ...clip, startTime } : clip
+                clip.id === clipId ? { ...clip, startTime } : clip,
               ),
             }
-          : track
+          : track,
       ),
     }));
   },
@@ -327,7 +327,7 @@ export const useTimelineStore = create<TimelineStore>((set, get) => ({
     get().pushHistory();
     set((state) => ({
       tracks: state.tracks.map((track) =>
-        track.id === trackId ? { ...track, muted: !track.muted } : track
+        track.id === trackId ? { ...track, muted: !track.muted } : track,
       ),
     }));
   },
@@ -375,10 +375,10 @@ export const useTimelineStore = create<TimelineStore>((set, get) => ({
                         name: getClipNameWithSuffix(c.name, "right"),
                       },
                     ]
-                  : [c]
+                  : [c],
               ),
             }
-          : track
+          : track,
       ),
     }));
 
@@ -417,10 +417,10 @@ export const useTimelineStore = create<TimelineStore>((set, get) => ({
                       trimEnd: c.trimEnd + durationToRemove,
                       name: getClipNameWithSuffix(c.name, "left"),
                     }
-                  : c
+                  : c,
               ),
             }
-          : track
+          : track,
       ),
     }));
   },
@@ -456,10 +456,10 @@ export const useTimelineStore = create<TimelineStore>((set, get) => ({
                       trimStart: c.trimStart + relativeTime,
                       name: getClipNameWithSuffix(c.name, "right"),
                     }
-                  : c
+                  : c,
               ),
             }
-          : track
+          : track,
       ),
     }));
   },
@@ -494,7 +494,7 @@ export const useTimelineStore = create<TimelineStore>((set, get) => ({
                   },
                 ],
               }
-            : track
+            : track,
         ),
       }));
     } else {
@@ -530,7 +530,7 @@ export const useTimelineStore = create<TimelineStore>((set, get) => ({
         const clipEnd =
           clip.startTime + clip.duration - clip.trimStart - clip.trimEnd;
         return Math.max(maxEnd, clipEnd);
-      }, 0)
+      }, 0),
     );
 
     return Math.max(...trackEndTimes, 0);

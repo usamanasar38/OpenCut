@@ -1,9 +1,9 @@
 import { toast } from "sonner";
 import {
-  getFileType,
   generateVideoThumbnail,
-  getMediaDuration,
+  getFileType,
   getImageDimensions,
+  getMediaDuration,
   type MediaItem,
 } from "@/stores/media-store";
 // import { generateThumbnail, getVideoInfo } from "./ffmpeg-utils"; // Temporarily disabled
@@ -12,7 +12,7 @@ export interface ProcessedMediaItem extends Omit<MediaItem, "id"> {}
 
 export async function processMediaFiles(
   files: FileList | File[],
-  onProgress?: (progress: number) => void
+  onProgress?: (progress: number) => void,
 ): Promise<ProcessedMediaItem[]> {
   const fileArray = Array.from(files);
   const processedItems: ProcessedMediaItem[] = [];

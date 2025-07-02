@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { CanvasSize, CanvasPreset } from "@/types/editor";
+import type { CanvasPreset, CanvasSize } from "@/types/editor";
 
 interface EditorState {
   // Loading states
@@ -30,7 +30,7 @@ const findBestCanvasPreset = (aspectRatio: number): CanvasSize => {
   // Calculate aspect ratio for each preset and find the closest match
   let bestMatch = DEFAULT_CANVAS_PRESETS[0]; // Default to 16:9 HD
   let smallestDifference = Math.abs(
-    aspectRatio - bestMatch.width / bestMatch.height
+    aspectRatio - bestMatch.width / bestMatch.height,
   );
 
   for (const preset of DEFAULT_CANVAS_PRESETS) {
@@ -60,7 +60,7 @@ const findBestCanvasPreset = (aspectRatio: number): CanvasSize => {
   return { width: bestMatch.width, height: bestMatch.height };
 };
 
-export const useEditorStore = create<EditorState>((set, get) => ({
+export const useEditorStore = create<EditorState>((set, _get) => ({
   // Initial states
   isInitializing: true,
   isPanelsReady: false,
@@ -92,7 +92,7 @@ export const useEditorStore = create<EditorState>((set, get) => ({
     const newCanvasSize = findBestCanvasPreset(aspectRatio);
     console.log(
       `Setting canvas size based on aspect ratio ${aspectRatio}:`,
-      newCanvasSize
+      newCanvasSize,
     );
     set({ canvasSize: newCanvasSize });
   },

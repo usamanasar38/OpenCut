@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useTimelineStore } from "@/stores/timeline-store";
 
 interface DragState {
@@ -36,7 +36,7 @@ export function useDragClip(zoomLevel: number) {
       clipId: string,
       trackId: string,
       clipStartTime: number,
-      clickOffsetTime: number
+      clickOffsetTime: number,
     ) => {
       e.preventDefault();
       e.stopPropagation();
@@ -51,7 +51,7 @@ export function useDragClip(zoomLevel: number) {
         currentTime: clipStartTime,
       });
     },
-    []
+    [],
   );
 
   const updateDrag = useCallback(
@@ -71,7 +71,7 @@ export function useDragClip(zoomLevel: number) {
         currentTime: snappedTime,
       }));
     },
-    [dragState.isDragging, dragState.clickOffsetTime, zoomLevel]
+    [dragState.isDragging, dragState.clickOffsetTime, zoomLevel],
   );
 
   const endDrag = useCallback(
@@ -86,7 +86,7 @@ export function useDragClip(zoomLevel: number) {
       const sourceTrack = tracks.find((t) => t.id === dragState.trackId);
       const targetTrack = tracks.find((t) => t.id === finalTrackId);
       const movingClip = sourceTrack?.clips.find(
-        (c) => c.id === dragState.clipId
+        (c) => c.id === dragState.clipId,
       );
 
       if (!movingClip || !targetTrack) {
@@ -140,7 +140,7 @@ export function useDragClip(zoomLevel: number) {
         currentTime: 0,
       });
     },
-    [dragState, tracks, updateClipStartTime, moveClipToTrack]
+    [dragState, tracks, updateClipStartTime, moveClipToTrack],
   );
 
   const cancelDrag = useCallback(() => {
@@ -188,7 +188,7 @@ export function useDragClip(zoomLevel: number) {
       }
       return null;
     },
-    [] // No dependencies needed since we use ref
+    [], // No dependencies needed since we use ref
   );
 
   const isValidDropTarget = useCallback(
@@ -203,7 +203,7 @@ export function useDragClip(zoomLevel: number) {
       // For now, allow drops on same track type
       return sourceTrack.type === targetTrack.type;
     },
-    [dragState.isDragging, dragState.trackId, tracks]
+    [dragState.isDragging, dragState.trackId, tracks],
   );
 
   return {
