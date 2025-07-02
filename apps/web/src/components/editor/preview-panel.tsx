@@ -21,7 +21,7 @@ import {
   DropdownMenuTrigger,
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
-import { Play, Pause, Volume2, VolumeX, Plus, Square } from "lucide-react";
+import { PlayIcon, PauseIcon } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import { formatTimeCode } from "@/lib/time";
@@ -305,9 +305,9 @@ function PreviewToolbar({ hasAnyClips }: { hasAnyClips: boolean }) {
         disabled={!hasAnyClips}
       >
         {isPlaying ? (
-          <Pause className="h-3 w-3" />
+          <PauseIcon className="h-3 w-3" />
         ) : (
-          <Play className="h-3 w-3" />
+          <PlayIcon className="h-3 w-3" />
         )}
       </Button>
       <div>
