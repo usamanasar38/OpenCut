@@ -24,6 +24,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { DraggableMediaItem } from "@/components/ui/draggable-item";
+import Image from "next/image";
 
 export function MediaView() {
   const { mediaItems, addMediaItem, removeMediaItem } = useMediaStore();
@@ -124,7 +125,7 @@ export function MediaView() {
     if (item.type === "image") {
       return (
         <div className="w-full h-full flex items-center justify-center">
-          <img
+          <Image
             src={item.url}
             alt={item.name}
             className="max-w-full max-h-full object-contain"
@@ -138,7 +139,7 @@ export function MediaView() {
       if (item.thumbnailUrl) {
         return (
           <div className="relative w-full h-full">
-            <img
+            <Image
               src={item.thumbnailUrl}
               alt={item.name}
               className="w-full h-full object-cover rounded"

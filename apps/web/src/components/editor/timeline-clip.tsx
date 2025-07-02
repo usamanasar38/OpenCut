@@ -27,7 +27,7 @@ import {
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
 } from "../ui/dropdown-menu";
-import { isDragging } from "motion/react";
+import Image from "next/image";
 
 export function TimelineClip({
   clip,
@@ -226,7 +226,7 @@ export function TimelineClip({
     if (mediaItem.type === "image") {
       return (
         <div className="w-full h-full flex items-center justify-center">
-          <img
+          <Image
             src={mediaItem.url}
             alt={mediaItem.name}
             className="w-full h-full object-cover"
@@ -240,7 +240,7 @@ export function TimelineClip({
       return (
         <div className="w-full h-full flex items-center gap-2">
           <div className="w-8 h-8 flex-shrink-0">
-            <img
+            <Image
               src={mediaItem.thumbnailUrl}
               alt={mediaItem.name}
               className="w-full h-full object-cover rounded-sm"
