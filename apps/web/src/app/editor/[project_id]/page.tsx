@@ -15,10 +15,11 @@ import { usePanelStore } from "@/stores/panel-store";
 import { useProjectStore } from "@/stores/project-store";
 import { EditorProvider } from "@/components/editor-provider";
 import { usePlaybackControls } from "@/hooks/use-playback-controls";
-import { useParams } from "next/navigation";
+import { useRouter, useParams } from "next/navigation";
 
 export default function Editor() {
   const { project_id } = useParams<Record<string, string>>();
+  const router = useRouter();
   const {
     toolsPanel,
     previewPanel,
@@ -36,7 +37,9 @@ export default function Editor() {
 
   useEffect(() => {
     if (activeProject?.id !== project_id) {
-      loadProject(project_id);
+      loadProject(project_id).catch((_) => {
+        router.replace("/404");
+      });
     }
   }, [project_id, activeProject, createNewProject]);
 
