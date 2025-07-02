@@ -31,7 +31,7 @@ export function Header() {
   }, []);
 
   const gotToEditor = async () => {
-    const newProjectId = createNewProject();
+    const newProjectId = await createNewProject();
     if (newProjectId) {
       router.push(`/editor/${newProjectId}`);
     }
