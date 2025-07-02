@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import {
   ResizablePanelGroup,
   ResizablePanel,
@@ -15,8 +15,10 @@ import { usePanelStore } from "@/stores/panel-store";
 import { useProjectStore } from "@/stores/project-store";
 import { EditorProvider } from "@/components/editor-provider";
 import { usePlaybackControls } from "@/hooks/use-playback-controls";
+import { useParams } from "next/navigation";
 
 export default function Editor() {
+  const { project_id } = useParams<Record<string, string>>();
   const {
     toolsPanel,
     previewPanel,
@@ -28,15 +30,15 @@ export default function Editor() {
     setTimeline,
   } = usePanelStore();
 
-  const { activeProject, createNewProject } = useProjectStore();
+  const { activeProject, createNewProject, loadProject } = useProjectStore();
 
   usePlaybackControls();
 
   useEffect(() => {
-    if (!activeProject) {
-      createNewProject("Untitled Project");
+    if (activeProject?.id !== project_id) {
+      loadProject(project_id);
     }
-  }, [activeProject, createNewProject]);
+  }, [project_id, activeProject, createNewProject]);
 
   return (
     <EditorProvider>
